@@ -1,0 +1,326 @@
+﻿<!DOCTYPE html>
+<html lang="en" >
+<head>
+
+
+
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"]  - Mkmnooo </title>
+    <style>
+        body {
+            background-color: #dedede !important;
+            padding: 0 !important;
+            margin: 0 !important;
+        }
+    </style>
+    <link rel="stylesheet" href="~/lib/bootstrap-4.5.0-dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" />
+    <link rel="stylesheet" href="~/lib/bootstrap-datetimepicker-master/css/bootstrap-datetimepicker.min.css" />
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap-4.5.0-dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    <script src="~/lib/jquery-validation/dist/jquery.validate.js"></script>
+    <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.js"></script>
+    <script src="~/lib/jquery-cookie/jquery.cookie.js"></script>
+    <script src="~/lib/echarts/echarts.js"></script>
+    <script src="~/lib/bootstrap-datetimepicker-master/js/bootstrap-datetimepicker.min.js"></script>
+
+</head>
+
+
+
+<body>
+
+    <nav class="navbar navbar-expand-lg fix-top navbar-dark bg-dark shadow-sm">
+        <div class="container">
+
+            <a class="navbar-brand" style="font-size:22px;" asp-controller="Home" asp-action="Index">
+                <span style="color:#ea9f1c;">Mk</span>mnooo
+            </a>
+
+            <a href="/Home/Index" class="navbar-link" style="color:#eee; text-decoration:none;">
+                Home
+            </a>
+
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav mr-auto">
+                    <li class="nav-item dropdown">
+                        <a id="accountz" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        </a>
+                        <div id="accountzinfo" class="dropdown-menu" aria-labelledby="accountz">
+                        </div>
+                    </li>
+                </ul>
+                <div class="form-inline my-2 my-lg-0">
+                    <input id="searchtext" class="form-control mr-sm-2" style="background-color:#d9f0f6;" type="text" placeholder="Search" aria-label="Search">
+                    <a href="#" class="btn btn-secondary my-2 my-sm-0" onclick="javascript:searchsubmit();">Search</a>
+                </div>
+            </div>
+
+        </div>
+    </nav>
+
+    <div class="bg-white shadow-sm">
+        <div class="container"><div class="row">
+            <nav class="nav">
+                <a class="nav-link " style="color:#333; font-size:14px;" href="/Calendar/VarietyCalendar?variety=Nonfarm Payrolls" tabindex="-1" aria-disabled="true"><b>NFP</b></a>
+                <a class="nav-link " style="color:#333; font-size:14px;" href="/Calendar/VarietyCalendar?variety=EIA Crude Oil Stocks Change" tabindex="-1" aria-disabled="true"><b>EIA</b></a>
+                <a class="nav-link " style="color:#333; font-size:14px;" href="/Detailed/IndexECBInterestRates" tabindex="-1" aria-disabled="true"><b>ECB Rates</b></a>
+                <a class="nav-link " style="color:#333; font-size:14px;" href="/Coronavirus/Index" tabindex="-1" aria-disabled="true"><b>C-19</b></a>   
+                <a class="nav-link " style="color:#333; font-size:14px;" href="/Calendar/Index" tabindex="-1" aria-disabled="true"><b>Calendar</b></a>
+            </nav>
+        </div></div>
+    </div>
+
+    <!-- Account  Small modal -->
+    <div id="cc" class="modal fade bs-example-modal-sm shadow" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel">
+        <div class="modal-dialog modal-sm modal-dialog-centered" role="document">
+            <div class="modal-content">
+
+                <div class="col-12 text-center">
+                    <form>
+                        <img class="mt-4 mb-4" src="~/img/logo2.png" width="62" height="62" />
+                        <label class="sr-only " for="usermailz">Email address</label>
+                        <input id="useremailz" class="form-control mb-4" type="Email" placeholder="Email address" />
+                        <label class="sr-only" for="userpasswordz">Password</label>
+                        <input id="userpasswordz" type="password" class="form-control" placeholder="Password" />
+                    </form>
+                </div>
+                <div id="tipsz" class="col-12 text-center">
+                </div>
+                <div class="col-12 text-center mt-5" style="">
+                    <button id="loginsubmit" class="btn btn-success" style="" onclick="loginsbt();">Login</button>
+                    <button id="registeredsubmit" class="btn btn-success" style="margin-left: 10px;" onclick="registersbt();">Register</button>
+                </div>
+
+                <div class="col-12 mt-3 mb-4 text-center">
+                    registration is not open!
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+    <div class="collapse container" id="L1">
+        <div class="row">
+
+            <div class="col-12">
+                <div class="row">
+                    <div id="loginstyle" class="col-12" style=" margin-top:20px;">
+                        <div class="col-lg-12" style="background-color:#cdcdcd; color:#444; padding-bottom:10px; padding-top:10px; ">
+                            <div class="row">
+
+                                <div class="col-xl-7" style="">
+                                    <img src="~/img/email.png" style="width:24px; height:24px; float:left;  margin-top:5px;" />
+                                    <input id="useremailz" type="Email" style=" margin-left:4px; float:left; width:150px; border:1px solid #bbb; " class="form-control" placeholder="Email" />
+                                    <img src="~/img/password.png" style="width:23px; height:23px; float:left; margin:5px 0 0 5px;" />
+                                    <input id="userpasswordz" type="password" style="margin-left:4px; float:left; width:120px; border:1px solid #bbb;" class="form-control" placeholder="Password" />
+                                </div>
+
+                                <div class="col-xl-5 text-center" style="">
+                                    <button id="loginsubmit" class="btn btn-success" style="" onclick="loginsbt();">Login</button>
+                                    <button id="registeredsubmit" class="btn btn-success" style="margin-left: 10px;" onclick="registersbt();">Register</button>
+                                    <span style="margin-top:8px; margin-left:5px;">registration is not open!</span>
+                                </div>
+
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <div id="searchstyle" class="col-12" style="margin-top:20px; ">
+                        <div class="col-12" style="background-color:#cdcdcd; color:#444; padding-bottom:10px; padding-top:5px; ">
+                            <div class="row">
+                                <div class="col-8">
+                                    <input id="searchtext" type="text" class="form-control" style=" " />
+                                </div>
+                                <div class="col-2" style="padding:0px;">
+                                    <button id="searchsubmit" onclick="searchsubmit();" class="btn btn-info btn-small" style="float:left;">search</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+
+    <!--content body-->
+    <div class="container mt-3" style="">
+        <div class="row">
+            <div class="col-12" style="">
+                @RenderBody()
+            </div>
+        </div>
+    </div>
+
+
+
+    <div class="container-fluid" style="color:#fff; text-align:center; margin-bottom:0px; padding-bottom:0px;  background:url(/img/bg1.jpg);   ">
+        <div class="row">
+            <div class="col-xl-2 col-lg-1 d-none d-lg-block" style=" height:20px;">
+            </div>
+            <div class="col-xl-8 col-lg-10 col-md-12 col-12" style="">
+
+                <div class="col-12" style="padding-top:30px; right: 0; left: 0; z-index:1030; bottom:0;">
+                    <a href="/Home/About"><img id="about" src="~/img/关于.png" width="40px" height="40px" onmouseover="" onmouseout="" /></a>&nbsp;&nbsp;&nbsp;
+                    <a href="/Home/Contactus"><img id="contact" src="~/img/联系.png" width="40px" height="40px" /></a>&nbsp;&nbsp;&nbsp;
+                    <a href="/Home/Privacy"><img id="privacy" src="~/img/条款.png" width="40px" height="40px" /></a>&nbsp;&nbsp;&nbsp;
+                    <a href="/Home/Cookie"><img id="cookie" src="~/img/客户端.png" width="40px" height="40px" /></a>&nbsp;&nbsp;&nbsp;
+                    <a href="/Home/Map"><img id="map" src="~/img/地图.png" width="40px" height="40px" /></a>
+                </div>
+                <div class="col-12" style="padding-top:10px; padding-bottom:30px; background:url(/img/bg1.jpg);  right: 0; left: 0; z-index:1030; bottom:0;">
+                    &copy; 2020 - mkmnooo.com mkmnooo.net - <a asp-area="" asp-controller="Home" asp-action="Privacy" style="color:#b0e8eb;">Disclaimer</a>
+                    <img src="~/img/tree.png" width="25px" height="25px" />
+                </div>
+
+            </div>
+            <div class="col-xl-2 col-lg-1  d-none d-lg-block" style=" height:10px;">
+
+            </div>
+        </div>
+    </div>
+
+
+
+</body>
+
+
+
+
+
+<script type="text/javascript" language="JavaScript">
+
+ 
+    function loginsbt() {
+        var emailx = $("#useremailz").val();
+        var passwordx = $("#userpasswordz").val();
+        var og = { password: passwordx, email: emailx };
+        $.ajax({
+            type: "post",
+            url: "/api/Authentication/requestToken",
+            headers: {
+                "Content-Type": "application/json;charset=UTF-8",
+                "Accept": "application/json;charset=UTF-8"
+            },
+            data: JSON.stringify(og),
+            dataType: "text",
+            success: function (result) {
+                if (result != "error") {
+                    $.cookie("tkkz", result, { expires: 7, path: "/" });
+                    actoken();
+                    $("#cc").modal("hide");
+                } else {
+                    $("#tipsz").html("No such account!");
+                }
+            }
+        });
+    }
+
+    function registersbt() {
+        var emailx = $("#useremailz").val();
+        var passwordx = $("#userpasswordz").val();
+        if (emailx == "") {
+            $("#tipsz").html("email!");
+            return;
+        }
+        if (passwordx == "") {
+            $("#tipsz").html("password!");
+            return;
+        }
+        var og = { password: passwordx, email: emailx };
+        $.ajax({
+            type: "post",
+            url: "/api/Authentication/registerToken",
+            headers: {
+                "Content-Type": "application/json;charset=UTF-8",
+                "Accept": "application/json;charset=UTF-8"
+            },
+            data: JSON.stringify(og),
+            dataType: "text",
+            success: function (result) {
+                switch (result) {
+                    case "userexist": $("#tipsz").html("Account already exists!"); break;
+                    case "false": $("#tipsz").html("Abnormal! please try again!"); break;
+                    default:
+                        $.cookie("tkkz", result, { expires: 7, path: "/" });
+                        actoken();
+                        $("#cc").modal("hide");
+                        break;
+                }
+            }
+        });
+    }
+
+
+    function outsubmit() {
+        $.cookie("tkkz", "ak", { expires: 1, path: "/" });
+        $('#accountz').show("Account");
+        actoken();
+    }
+
+    //$(location).attr('href', '/Home/Search?searchtext=u');
+    function searchsubmit() {        
+        var stxx = $("#searchtext").val();
+        if (stxx != null && stxx != "") {
+            $(location).attr('href', '/Home/Search?searchtext='+ encodeURI(stxx));
+        } else {
+            return;
+        }
+    }
+
+
+    //////////////////////////////////////////////////////////////////////////////////////////////
+    function actoken() {
+        $.ajax({
+            type: "post",
+            url: "/User/VldToken",
+            data: {},
+            contenType: "application/json;charset=UTF-8",
+            dataType: "json",
+            headers: {
+                "Authorization": "Bearer " + $.cookie("tkkz")
+            },
+            success: function (result) {
+                $("#accountz").html(result[0]);
+                $("#accountzinfo").html(result[1]);
+                if (result[0] != null) {
+
+                } else {
+
+                }
+
+            }
+        });
+    }
+
+    //$(document).ready(function () {
+    //alert();
+    actoken();
+    //});
+
+
+
+
+
+
+
+</script>
+@RenderSection("Scripts", required: false)
+
+
+
+
+</html>
+

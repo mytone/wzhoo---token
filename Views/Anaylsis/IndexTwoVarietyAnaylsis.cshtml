@@ -1,0 +1,285 @@
+﻿@{
+ViewData["Title"] = "mkmnooo " + ViewBag.variety + " vs " + ViewBag.variety2 + " Anaylsis";
+Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<div class="row" id="toppp">
+    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" style="margin-bottom:10px;">
+
+        <div class="col-12" style=" padding-bottom:8px; padding-top:10px; background-color:#cecece; border-left:2px solid #525f83;">
+            <div class="row">
+                <div class="col-lg-6 col-12">
+                    <h5 href="/Detailed/Index?variety=6b_day" style="color:#1f3369; margin-right:20px; float:left;"><b>@ViewBag.variety vs @ViewBag.variety2</b></h5>
+                    <h6 style="float: left;  color: #555; padding-top:3px;"> Anaylsis | Compare by percentage of benchmark data </h6>
+                </div>
+                <div class="col-lg-6 col-12 text-right" style="">
+                    <div class="btn-group-xs btn-group-success" role="group" aria-label="...">
+                        <div class="btn-group" role="group">
+                            <button type="button" class="btn btn-info btn-sm" onclick="javascript: mmm(7); ">W</button>
+                        </div>
+                        <div class="btn-group" role="group">
+                            <button type="button" class="btn btn-info btn-sm" onclick="javascript: mmm(30);">M</button>
+                        </div>
+                        <div class="btn-group" role="group">
+                            <button type="button" class="btn btn-info btn-sm" onclick="javascript: mmm(365);">Y</button>
+                        </div>
+                        <div class="btn-group" role="group">
+                            <button type="button" class="btn btn-info btn-sm" onclick="javascript: mmm(1080);">3Y</button>
+                        </div>
+                        <div class="btn-group" role="group">
+                            <button type="button" class="btn btn-info btn-sm" onclick="javascript: mmm(1800); ">5Y</button>
+                        </div>
+                        <div class="btn-group" role="group">
+                            <button type="button" class="btn btn-info btn-sm" onclick="javascript: mmm(99999);"> All </button>
+                        </div>
+                        <div class="btn-group" role="group">
+                            <a href="/Detailed/IndexDay?variety=@ViewBag.variety" class="btn btn-success btn-sm">@ViewBag.variety</a>
+                        </div>
+                        <div class="btn-group" role="group">
+                            <a href="/Detailed/IndexDay?variety=@ViewBag.variety2" class="btn btn-success btn-sm">@ViewBag.variety2</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!--new chart baidu-->
+        <div class="col-12" style="background-color:#fefefe; margin-top:20px;">
+            <div class="col-row" style="">
+                <img src="~/img/图表.png" width="25px" height="25px;" style="margin-top:20px; " />
+            </div>
+            <div id="main" class="col-12" style="height:320px;  padding-left:0px; ">
+            </div>
+        </div>
+
+
+        <div class="col-12" style="font-size:14px; background-color:#ffffff; margin-top:3px; padding-top:20px;">
+            <div class="row" style="padding-left:10px;">
+                <img src="~/img/数据.png" width="28px;" height="28px;" />
+            </div>
+            <table class="table table-hover table-condensed" style="margin-top:20px; min-height:300px;">
+                <tbody id="tabledisplay">
+                </tbody>
+            </table>
+        </div>
+
+        <div id="bto" class="col-12 text-right">
+            <span style="font-size:14px; margin-right:20px;">Notice: Not guaranteed to be completely accureate,For reference only.</span>
+            <a href="#"><img src="~/img/置顶.png" width="30px" height="30px" /></a>
+        </div>
+
+
+    </div>
+</div>
+
+
+@section Scripts
+{
+    @{ await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
+<script type="text/javascript" language="JavaScript">
+
+
+    var pageno = 0;
+
+    function mmm(scount) {
+        jjj(scount);
+    }
+
+    function jjj(scount) {
+                var strr='';
+                $.ajax({
+                    type: "post",
+                    url: "/Anaylsis/OnTableTwoVarietyAnaylsisList",
+                    contenType: "application/json; charset=utf-8",
+                    data: { variety: '@ViewBag.variety',variety2:'@ViewBag.variety2',level:'@ViewBag.level',pageno:scount},
+                    dataType: "json",
+                    beforeSend: function () {
+                        $("#tabledisplay").html("<span style='color:#336699;'><b>Loading data......</b></span");
+                    },
+                    success: function (result) {
+                        var strDataClose      = new Array();                        
+                        var strDataClose2     = new Array();
+                        var strDataCloseRate  = new Array();
+                        var strDataCloseRate2 = new Array();
+                        var strDay = new Array();
+                        var j = result.length;
+
+                        strr = strr + '<tr style=""><td style="padding-left:0px;"><b>DateTime</b></td>';
+                        strr = strr + '<td><b>@ViewBag.variety Close</b></td><td><b>@ViewBag.variety2 Close</b></td></tr>';    //<td><b>Volume2</b></td>
+                       
+                        //var hhh = result[0].close2 / result[0].close;
+                        //$("#des").html(" " + hhh.toFixed(2).toString() + " times the original data.");
+                        for (var i = 0; i < j; i++){
+                            strr = strr + '<tr style="">';
+                            strr = strr + '<td style="padding-left:0px;">' + result[i].datetime + '</td>';
+                            //strr = strr + '<td style="color:#336699; ">' + result[i].open  + '</td>';
+                            //strr = strr + '<td style="color:#336699; ">' + result[i].high + '</td>';
+                            //strr = strr + '<td style="color:#336699; ">' + result[i].low + '</td>';
+                            strr = strr + '<td style="color:#336699; ">' + result[i].close + '</td>';
+                            //strr = strr + '<td>' + result[i].totalvolume + '</td>';
+                            //strr = strr + '<td><b>' + result[i].datetime2 + '</b></td>';
+                            //strr = strr + '<td style="color:#996633; ">' + result[i].open2 + '</td>';
+                            //strr = strr + '<td style="color:#996633; ">' + result[i].high2 + '</td>';
+                            //strr = strr + '<td style="color:#996633; ">' + result[i].low2 + '</td>';
+                            strr = strr + '<td style="color:#996633; ">' + result[i].close2 + '</td>';
+                            //strr = strr + '<td><b>' + result[i].totalvolume2 + '</b></td>';
+                            strr = strr + '</tr>';
+
+                            //strDataClose[i]      = result[i].close;
+                            //strDataClose2[i]     = result[i].close2 / hhh;
+                            strDataCloseRate[i]  = ((result[i].close - result[0].close)   / result[0].close+1).toFixed(3);
+                            strDataCloseRate2[i] = ((result[i].close2 - result[0].close2) / result[0].close2+1).toFixed(3);
+
+                            strDay[i] = result[i].datetime;
+
+                        }
+
+                        $("#tabledisplay").html(strr);
+
+
+                        var myChart = echarts.init(document.getElementById('main'));// 基于准备好的dom，初始化echarts实例
+
+                        var option = {
+
+                            title: {
+                                text: '',
+                                color: '#105712',
+                            },
+
+                            grid: {
+                                left: "5%",
+                                right: "2%",
+                                height: "75%",
+                                bottom: "13%",
+                            },
+
+                            tooltip: {
+                                trigger: 'axis',
+                                axisPointer: {
+                                    type: 'cross'
+                                },
+                                backgroundColor: '#666',
+                                borderWidth: 0,
+                                borderColor: '#ccc',
+                                padding: 10,
+                                textStyle: {
+                                    color: '#eee',
+                                    fontSize: 12,
+                                },
+                                position: function (point, params, dom, rect, size) {
+                                    var x = 0; // x坐标位置
+                                    var y = 0; // y坐标位置
+                                    // 当前鼠标位置
+                                    var pointX = point[0];
+                                    var pointY = point[1];
+
+                                    // 提示框大小
+                                    var boxWidth = size.contentSize[0];
+                                    var boxHeight = size.contentSize[1];
+                                    // boxWidth > pointX 说明鼠标左边放不下提示框
+                                    if (boxWidth > pointX) {
+                                        x = 5;
+                                    } else { // 左边放的下
+                                        x = pointX - boxWidth;
+                                    }
+                                    // boxHeight > pointY 说明鼠标上边放不下提示框
+                                    if (boxHeight > pointY) {
+                                        y = 5;
+                                    } else { // 上边放得下
+                                        y = pointY - boxHeight;
+                                    }
+                                    return [x, y];
+                                },
+
+                                extraCssText: 'width:170px',
+                            },
+
+                            legend: {
+                                data: ['Price']
+                            },
+
+                            xAxis: {
+                                data: strDay.reverse(),
+                                axisLine: {
+                                    lineStyle: {
+                                        color: '#aaa',
+                                        width: 1.2,
+                                    },
+                                },
+                                splitLine: {
+                                    lineStyle: {
+                                        color: '#eee',
+                                    },
+                                    show: true,
+                                },
+                                axisLabel: {
+                                    color: '555',
+                                },
+                            },
+
+                            yAxis: {
+                                min: 'dataMin', //就是这两个 最小值
+                                max: 'dataMax', //最大值
+                                axisLine: {
+                                    lineStyle: {
+                                        color: '#aaa',
+                                        width: 1.2,
+                                    }
+                                },
+                                splitLine: {
+                                    lineStyle: {
+                                        color: '#eee',
+                                    },
+                                    show: true,
+                                },
+                                axisLabel: {
+                                    color: '#555',
+                                },
+                            },
+
+                            series: [{
+                                name: '@ViewBag.variety',
+                                type: 'line',
+                                data: strDataCloseRate.reverse(),//[5, 20, 36, 10, 10, 20]
+                                smooth: true,
+                                itemStyle: {
+                                    normal: {
+                                        color: '#6cb041',
+                                        lineStyle: {
+                                            width: 1, //设置线条粗细
+                                            color: '#336699',
+                                        }
+                                    }
+                                }
+                            },{
+                                name: '@ViewBag.variety2',
+                                type: 'line',
+                                data: strDataCloseRate2.reverse(), //[5, 20, 36, 10, 10, 20]
+                                smooth: true,
+                                itemStyle: {
+                                    normal: {
+                                        color: '#6cb041',
+                                        lineStyle: {
+                                            width: 1, //设置线条粗细
+                                            color: '#996633',
+                                        }
+                                    }
+                                }
+                            }],
+                        };
+                        myChart.setOption(option);       
+
+
+                    },
+
+                });
+    }
+
+    $(document).ready(function () {
+        jjj(99999);
+    });
+
+</script>
+}

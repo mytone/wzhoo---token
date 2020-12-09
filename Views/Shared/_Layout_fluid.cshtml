@@ -1,0 +1,113 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+
+
+
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"]  - Mkmnooo </title>
+    <style>
+        body {
+            background-color: #dedede !important;
+            padding: 0 !important;
+            margin: 0 !important;
+        }
+
+        #map { 
+            height: 100%;
+            width: 100%;
+            position: absolute;
+            top: 0px;
+            bottom: 0px;
+            background: #00FF00 url('map/n/n/n.png') repeat;
+            z-index: 0;
+            overflow:hidden; word-break:break-all; 
+
+        }
+    </style>
+    <link rel="stylesheet" href="~/lib/bootstrap-4.5.0-dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" />
+    <link rel="stylesheet" href="~/lib/bootstrap-datetimepicker-master/css/bootstrap-datetimepicker.min.css" />
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap-4.5.0-dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    <script src="~/lib/jquery-validation/dist/jquery.validate.js"></script>
+    <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.js"></script>
+    <script src="~/lib/jquery-cookie/jquery.cookie.js"></script>
+    <script src="~/lib/echarts/echarts.js"></script>
+    <script src="~/lib/bootstrap-datetimepicker-master/js/bootstrap-datetimepicker.min.js"></script>
+</head>
+
+
+
+<body>
+
+    <!--content body-->
+    <div class="container-fluid" style="margin-top:10px; min-height:300px; margin-bottom:10px; ">
+        <div class="row">
+            <div class="col-12">
+                <main role="main" class="pb-3">
+                    @RenderBody()
+                </main>
+            </div>
+        </div>
+    </div>
+
+
+
+
+</body>
+
+
+
+
+
+<script type="text/javascript" language="JavaScript">
+
+    //$("body").css("background-color", "#dedede");
+
+
+
+    //////////////////////////////////////////////////////////////////////////////////////////////
+    function actoken() {
+        $.ajax({
+            type: "post",
+            url: "/User/VldToken",
+            data: {},
+            contenType: "application/json;charset=UTF-8",
+            dataType: "json",
+            headers: {
+                "Authorization": "Bearer " + $.cookie("tkkz")
+            },
+            success: function (result) {
+                if (result[0] != null) {
+                    $("#accountz").hide();
+                    $("#loginstyle").hide();
+                    $("#userinfostyle").html(result[3]);
+                } else {
+                    $("#loginstyle").show();
+                }
+
+            }
+        });
+    }
+
+    //$(document).ready(function () {
+    actoken();
+    //});
+
+
+
+
+
+</script>
+@RenderSection("Scripts", required: false)
+
+
+
+
+</html>
+
+l>

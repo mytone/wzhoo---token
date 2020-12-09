@@ -1,0 +1,80 @@
+﻿@model User
+@{
+    ViewData["Title"] = "UserAdd";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+}
+
+<h2 style="color:#1f3369"><b>What you want</b></h2>
+<p>If you want more data, please fill out the form below.</p>
+<br />
+<form style="font-size:16px;" method="post" asp-controller="User" asp-action="AddDeal">
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    <div class="form-group">
+        <h5 asp-for="content">Content</h5>
+        <input type="text" class="form-control" asp-for="content" placeholder="" />
+        <span asp-validation-for="content" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <h5 asp-for="name">Name</h5>
+        <input type="text" class="form-control" asp-for="name" placeholder="" />
+        <span asp-validation-for="name" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <h5 asp-for="email">Your Email</h5>
+        <input type="Email" class="form-control" asp-for="email" placeholder="" />
+        <span asp-validation-for="email" class="text-danger"></span>
+        <br />
+        <input type="hidden" asp-for="variety" value="@ViewBag.variety" />
+    </div>
+    <button class="btn btn-success">Submit</button>
+</form>
+
+
+<h2 style="color:#1f3369; margin-top:70px;" ><b>What most want</b></h2>
+<p>List of requirements</p>
+<div style="font-size:15px;" class="container">
+
+    <div style="height:36px; background-color:#eee; border-bottom:1px solid #ddd; line-height:36px;" class="row">
+        <div style="padding-left:0px;" class="col-lg-2 col-md-2 col-sm-2"><b>Name</b></div>
+        <div class="col-lg-10 col-md-10 col-sm-10"><b>Content</b></div>
+    </div>
+    <div id="ppp">
+    </div>
+</div>
+
+
+@section Scripts
+{
+    @{ await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script type="text/javascript" language="JavaScript">
+        var str="";
+        function kkk() {            
+            $.ajax({
+                type: "post",
+                url: "/User/OnContentAdd",
+                contenType: "application/json; charset=utf-8",
+                data: { variety:'@ViewBag.variety',pageno:0 },
+                dataType: "json",
+                success: function (result) {
+                    var str = "";
+                    for (var i = 0; i < result.length; i++){
+                        //alert(result.length);
+                        str = str + '<div style="min-height:36px; border-bottom:1px solid #ddd; line-height:36px;" class="row"><div style="padding-left:0px;" class="col-lg-2 col-md-2 col-sm-2">';
+                        str = str + result[i].name;
+                        str = str + '</div><div class="col-lg-10 col-md-10 col-sm-10">';
+                        str = str + result[i].content;
+                        str = str + '</div></div>';
+                        $("#ppp").html(str);
+                    }
+                }
+            })
+        }
+        $(document).ready(function () {
+             kkk();
+        });
+
+    </script>
+}
+
+

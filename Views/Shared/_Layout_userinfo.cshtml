@@ -1,0 +1,118 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"]  - wzhoo</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/lib/Chart.js/Chart.css"/>
+    
+    <link rel="stylesheet" href="~/css/site.css" />
+</head>
+<body style="background-color:#efefef;">
+
+    <header>
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-dark " style="height:50px; border-bottom:1px solid #ddd; background-color:#222222;">
+            <!--box-shadow mb-3-->
+            <div class="container">
+                <a class="navbar-brand" style="font-size:24px; color:#aaa; font-weight:400; font-family:Impact;" asp-area="" asp-controller="Home" asp-action="Index">
+                    <span style="color:#ff6a00;">W</span>zhooooo
+                </a>
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+                        aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+
+                <a class="" role="button" style="color:#ff6a00" data-toggle="collapse" href="#L1" aria-expanded="false" aria-controls="L1">
+                    @ViewData["Regflag"]
+                </a>
+
+            </div>
+        </nav>
+
+    </header>
+
+
+
+    <div class="collapse container" id="L1">
+        <main role="main" class="row">
+            <div class="col-lg-8" style="margin-top:20px; ">
+                sdfsfsa,sdfsafdsa,sdfsafdsa,sdfasfda
+                <br />
+                sfdsaf,dsfsadf
+            </div>
+            <div class="col-lg-4" style="margin-top:20px; border-left:1px solid #ff6a00;">
+                <form style="font-size:16px;" method="post">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <div class="form-group">
+                        <h6 asp-for="email">Your Email</h6>
+                        <input type="Email" class="form-control" placeholder="" />
+                        <span class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <h6 asp-for="passsword">Password</h6>
+                        <input type="password" class="form-control" placeholder="" />
+                        <span class="text-danger"></span>
+                    </div>
+                    <button id="loginsubmit" class="btn btn-success">Login</button>
+                    &nbsp;
+                    <button id="registeredsubmit" class="btn btn-success">Register</button>
+                </form>
+            </div>
+        </main>
+    </div>
+
+
+
+
+
+    <div class="container" style="margin-top:50px;">
+        <main role="main" class="pb-3">
+            @RenderBody()
+        </main>
+    </div>
+
+
+
+    <footer class="border-top footer text-muted">
+        <div class="container">
+            &copy; 2020 - wzhoo.com wzhoo.net - <a asp-area="" asp-controller="Home" asp-action="Privacy">Disclaimer </a>
+        </div>
+    </footer>
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    <script src="~/lib/jquery-validation/dist/jquery.validate.js"></script>
+    <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.js"></script>
+    <script src="~/lib/jquery-cookie/jquery.cookie.js"></script>
+    <script src="~/lib/Chart.js/Chart.js"></script>
+    @RenderSection("Scripts", required: false)
+
+    <script type="text/javascript" language="JavaScript">
+
+        $("#loginsubmit").click(function () {
+            var og = { name: "sdfs", password: "sdfsafd", email: "sdfs@sdfs.com" };
+            alert();
+            $.ajax({
+                type: "post",
+                url: "/api/Authentication/requestToken",
+                headers: {
+                    "Content-Type": "application/json;charset=UTF-8",
+                    "Accept": "application/json;charset=UTF-8"
+                },
+                data: JSON.stringify(og),
+                dataType: "text",
+                success: function (result) {
+                    alert(result);
+                    $.cookie("tkkz", result, { expires: 7, path: "/" });
+                }
+            });
+        });
+    </script>
+
+</body>
+</html>
+
+

@@ -1,0 +1,135 @@
+﻿
+@{
+    ViewData["Title"] = "Economic Calendars";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<script src="~/js/moment.min.js"></script>
+
+<div class="row">
+
+    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" style="margin-bottom:10px;">
+
+        <div class="col-lg-12" style=" background-color:#cecece; border-left:2px solid #525f83; ">
+            <div class="row">
+                <div class="col-md-11 col-9" style=" padding-bottom:8px; padding-top:10px;">
+                    <h5 href="/Detailed/Index?variety=6b_day" style="color:#333;  margin-top:4px;">
+                        <b>Economic Calendar</b>
+                    </h5>
+
+                </div>
+                <div class="col-md-1 col-3 text-right" style="background-image:url(/img/bg1.jpg);padding:13px 15px 13px 0;">
+                    <span style="font-size:13px; color:#fff; ">
+                        <b>
+                            GMT+0
+                        </b>
+                    </span>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="col-12" style="font-size:14px; background-color:#ffffff; margin-top:20px; padding-top:18px;">
+            <div class="row" style="padding-left:10px;">
+
+                <img src="~/img/数据.png" width="28px;" height="28px;" />
+                <input id='datetimepicker1' type='text' readonly class="form_datetime form-control form-control-sm" style="width:130px; font-weight:700; border:1px solid #666; float:left; margin-left:20px;" placeholder="Select trading day" />
+                <button id="a" class="btn btn-sm btn-success" onclick="javascript:preday(); " style="float:left; margin-left:5px;">The day before</button>
+                <button id="b" class="btn btn-sm btn-success" onclick="javascript:tday(); " style="float:left; margin-left:5px;">Today</button>
+
+            </div>
+
+            <div class="row" id="tabledisplay" style="padding-top:15px; padding-bottom:15px; ">
+            </div>
+        </div>
+
+
+        <div id="bto" class="col-12 text-right">
+            <span style="font-size:14px; margin-right:20px;">Notice: Not guaranteed to be completely accureate,For reference only.</span>
+            <a href="#"><img src="~/img/置顶.png" width="30px" height="30px" /></a>
+        </div>
+
+
+    </div>
+</div>
+
+
+
+
+
+@section Scripts
+{
+    @{ await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
+    <script type="text/javascript" language="JavaScript">
+
+        function jjj(datetimez) {
+            
+            var strr = '';
+            $.ajax({
+                type: "post",
+                url: "/Calendar/OnCalendarList",
+                contenType: "application/json;charset=UTF-8",
+                data: { datetime: datetimez },
+                dataType: "json",
+                beforeSend: function () {
+                    $("#tabledisplay").html("<span style='color:#336699;'><b>Loading data......</b></span");
+                },
+                success: function (result) {
+                    var j = result.length;
+                    strr = strr + '<div class="col-xl-2 col-lg-2 col-md-2 d-none d-md-block" style="border-bottom:1px solid #dedede; background-color:#eee;  line-height:40px;"><b>Date</b></div>';
+                    strr = strr + '<div class="col-xl-1 col-lg-2 col-md-2 col-3 " style="border-bottom:1px solid #dedede;background-color:#eee; line-height:40px;"><b>Time</b></div>';
+                    strr = strr + '<div class="col-xl-1 col-lg-2 col-md-2 col-3" style="border-bottom:1px solid #dedede;background-color:#eee; line-height:40px;"><b>Currency</b></div>';
+                    strr = strr + '<div class="col-xl-4 col-lg-2 col-md-2 col-3" style="border-bottom:1px solid #dedede;background-color:#eee; line-height:40px;"><b>Event</b></div>';
+                    strr = strr + '<div class="col-xl-2 col-lg-2 col-md-2 d-none d-md-block " style="border-bottom:1px solid #dedede;background-color:#eee;line-height:40px;"><b>Forecast</b></div>';
+                    strr = strr + '<div class="col-xl-2 col-lg-2 col-md-2 col-3 " style="border-bottom:1px solid #dedede;background-color:#eee;line-height:40px;"><b>Actual</b></div>';
+                    for (var i = 0; i < j; i++) {
+                        strr = strr + '<div class="col-xl-2 col-lg-2 col-md-2 d-none d-md-block " style="border-bottom:1px solid #dedede; line-height:20px; padding-top:10px; padding-bottom:10px;">' + moment(result[i].datetime).add(8, "hours").format("YYYY-MM-DD") + '</div>';
+                        strr = strr + '<div class="col-xl-1 col-lg-2 col-md-2 col-3 " style="border-bottom:1px solid #dedede;  line-height:20px; padding-top:10px; padding-bottom:10px;">' + result[i].time + '</div>';
+                        strr = strr + '<div class="col-xl-1 col-lg-2 col-md-2 col-3" style="border-bottom:1px solid #dedede;  line-height:20px; padding-top:10px; padding-bottom:10px;" >' + result[i].currency + '</div>';
+                        strr = strr + '<div class="col-xl-4 col-lg-2 col-md-2 col-3" style="border-bottom:1px solid #dedede;  line-height:20px; padding-top:10px; padding-bottom:10px;"><a href="/Calendar/VarietyCalendar?variety=' + encodeURI(result[i].eventz) + '"><b>' + result[i].eventz + '</b></a></div>';
+                        strr = strr + '<div class="col-xl-2 col-lg-2 col-md-2 d-none d-md-block " style="border-bottom:1px solid #dedede;  line-height:20px; padding-top:10px; padding-bottom:10px;">' + result[i].forecast + '</div>';
+                        strr = strr + '<div class="col-xl-2 col-lg-2 col-md-2 col-3 " style="border-bottom:1px solid #dedede;  line-height:20px; color:#336699; padding-top:10px; padding-bottom:10px;"><b>' + result[i].actual + '</b></div>';
+                    }
+                    $("#tabledisplay").html(strr);
+                }
+            });
+        }
+
+        var ds=-1;
+        jjj("");
+
+        function preday() {
+            var pd = moment().add(ds, 'days').format("YYYY-MM-DD");
+            jjj( pd );
+            $("#datetimepicker1").val(pd);   
+            ds--;
+        }
+
+        function tday() {
+            jjj("");
+            $("#datetimepicker1").val(moment().format("YYYY-MM-DD"));            
+            ds = -1;
+        }
+
+        $(document).ready(function () {
+         
+            $("#datetimepicker1").val( moment().format("YYYY-MM-DD") );
+            $('#datetimepicker1').datetimepicker({
+                format: 'yyyy-mm-dd',
+                autoclose: 1,
+                todayBtn: true,
+                minView: 2,
+                todayHighlight: true,
+                keyboardNavigation: true,
+            }).on('changeDate', function (ev) {
+                jjj($("#datetimepicker1").val());
+            });
+
+        })
+
+
+    </script>
+
+}
+

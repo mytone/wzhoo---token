@@ -1,0 +1,111 @@
+﻿@{
+    ViewData["Title"] = "Wzhoo.com  Index";
+    Layout = "~/Views/Shared/_Layout_fluid.cshtml";
+}
+
+
+<div class="row">
+
+    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" style="margin-bottom:10px;">
+        <div class="thumbnail" style="background-color:#efefef; ">
+            <div class="caption">
+                <h3 class="h2" href="/Detailed/Index?variety=6b_day" style="color:#1f3369"><b>@ViewBag.variety</b></h3>
+                <p style="color:#333;  font-size:14px;" id="statisticedisplay">
+                </p>
+
+                <div style="font-size:14px;">
+                    <table class="table table-hover table-bordered">
+                        <tbody id="tabledisplay">
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="text-center" style="margin-top:30px;">
+                    <a href="/User/Add?variety=@ViewBag.variety" style="font-size:26px; font-weight:600;">the more....</a>
+                </div>
+                <!--
+                <p>
+                    <a href="#" class="btn btn-primary" role="button">Button</a> <a href="#" class="btn btn-default" role="button">Button</a>
+                </p>
+                -->
+            </div>
+        </div>
+    </div>
+
+</div>
+
+@section Scripts
+{
+    @{ await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script type="text/javascript" language="JavaScript">
+
+
+        //var pageno = 0;
+
+        function kkk() {
+            var str="";
+            $.ajax({
+                type: "post",
+                url: "/Detailed/OnStatistics",
+                contenType: "application/json; charset=utf-8",
+                data: { variety: '@ViewBag.variety' },
+                dataType: "json",
+                beforeSend: function () {
+                    $("#statisticedisplay").html("<span style='color:#336699;'><b>Loading data......</b></span");
+                },
+                success: function (result) {
+                    str = str + result[3]+ '&nbsp;&nbsp; Not guaranteed to be completely accureate,For reference only.<br /> ';
+                    str = str + 'Time limit: <b>' + result[2] + ' - ' + result[1] + '</b ><br />The amount of data: <b>' + result[0] + '( Display data: top  )</b>';
+                    $("#statisticedisplay").html(str);
+                }
+            });
+        }
+
+        function ppp() {
+            var strr='';
+            $.ajax({
+                type: "post",
+                url: "/My/OnMoneyFlowAllView",
+                contenType: "application/json; charset=utf-8",
+                data: {},
+                dataType: "json",
+                beforeSend: function () {
+                    $("#tabledisplay").html("<span style='color:#336699;'><b>Loading data......</b></span");
+                },
+                success: function (result) {
+                    strr = strr + '<tr style="background-color:#ddd"><td style="padding-left:0px;"><b>Status</b></td>';
+                    strr = strr + '<td><b>PlatForm</b></td><td><b>Name</b></td><td><b>Type</b></td><td><b>PreRateYear</b></td>';
+                    strr = strr + '<td><b>PlanDay</b></td><td><b>PreRate</b></td><td><b>Cost</b></td><td><b>ReturnMoney</b></td>';
+                    strr = strr + '<td><b>BuyDateTime</b></td><td><b>PlanReturnDateTime</b></td><td><b>Description</b></td><td><b>ReturnDateTime</b></td>';
+                    strr = strr + '<td><b>AcReturn</b></td><td><b>Description_f</b></td></tr>';
+                    for (var i = 0; i < result.length; i++){
+                        strr = strr + '<tr>';
+                        strr = strr + '<td style="padding-left:0px;">'+result[i].status+'</td>';
+                        strr = strr + '<td>' + result[i].platform+'</td>';
+                        strr = strr + '<td>' + result[i].name+'</td>';
+                        strr = strr + '<td>' + result[i].type+'</td>';
+                        strr = strr + '<td>' + result[i].prerateyear+'</td>';
+                        strr = strr + '<td>' + result[i].planday + '</td>';
+                        strr = strr + '<td>' + result[i].prerate + '</td>';
+                        strr = strr + '<td>' + result[i].cost + '</td>';
+                        strr = strr + '<td>' + result[i].returnmoney + '</td>';
+                        strr = strr + '<td>' + result[i].buydatetime + '</td>';
+                        strr = strr + '<td>' + result[i].planreturndatetime + '</td>';
+                        strr = strr + '<td>' + result[i].description + '</td>';
+                        strr = strr + '<td>' + result[i].returndatetime + '</td>';
+                        strr = strr + '<td>' + result[i].acreturn + '</td>';
+                        strr = strr + '<td>' + result[i].description_f+'</td>';
+                        strr = strr + '</td>';
+                    }
+                    $("#tabledisplay").html(strr);
+                }
+            });
+        }
+
+        $(document).ready(function () {
+            //kkk();
+            ppp();
+        })
+
+    </script>
+}

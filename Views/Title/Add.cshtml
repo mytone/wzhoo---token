@@ -1,0 +1,278 @@
+﻿
+@{
+    ViewData["Title"] = "Add";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<link href="~/lib/summernote/summernote-bs4.css" rel="stylesheet" />
+<script src="~/lib/summernote/summernote-bs4.js"></script>
+<script src="~/js/md5.js"></script>
+
+
+<h1><b>Title Add</b></h1>
+<br/>
+<br/>
+<div class="row">
+
+    <div class="col-xl-6 col-xs-12">
+        CN
+        <div id="summernotecn" style="background-color:#fff;"></div>
+        <br />
+        <br />
+        <br />
+    </div>
+
+    <div class="col-xl-6 col-xs-12">
+        <form enctype="multipart/form-data">
+            EN
+            <div id="summernoteen" style="background-color:#fff;"></div>
+        </form>
+        <br /><br />
+    </div>
+
+    <div class="col-xl-12">
+        <button type="submit" class="btn btn-success" id="titletranslate">Translate</button>&nbsp;&nbsp;
+        <button type="submit" class="btn btn-success" id="titleadd">Submit</button>
+        <div id="infoz"></div>
+    </div>
+
+    <div class="col-xl-12" style="margin-top:30px;">
+        <div id="titlelistdisplay"></div>
+    </div>
+
+</div>
+
+
+<script type="text/javascript" language="JavaScript">
+
+    $(document).ready(function () {
+
+        $('#summernotecn').summernote({
+            lang: 'zh-CN',
+            placeholder: 'text content...',
+            tabsize: 4,
+            minHeight: 200,
+            focus: true,
+            toolbar: [
+                ['fontsizestyle', ['fontsize', 'color', 'style', 'paragraph', 'bold']], //字体大小
+                ['style', ['style']],//样式
+                //['para', ['ul', 'ol', 'paragraph']], //无序列表、有序列表、段落对齐方式
+                ['linkpicturevideo', ['link', 'picture', 'video']], //插入链接
+                //['picture',['picture']], //插入图片
+                //['video',['video']], //插入视频
+                ['fullscreencodeview', ['fullscreen', 'codeview']], //全屏
+                //['codeview',['codeview']], //查看html代码
+            ],
+            /*
+            callbacks: {
+                onImageUpload: function (file) {          //图片默认以二进制的形式存储到数据库，调用此方法将请求后台将图片存储到服务器，返回图片请求地址到前端
+                    //将图片放入Formdate对象中
+                    var formData = new FormData();
+                    //‘picture’为后台获取的文件名，file[0]是要上传的文件
+                    formData.append("picture", file[0]);
+                    $.ajax({
+                        type: 'POST',
+                        url: '/titles/reportupimage',                   //请求后台地址
+                        cache: false,
+                        data: formData,
+                        processData: false,
+                        contentType: false,
+                        dataType: 'JSON',          //请求成功后，后台返回图片访问地址字符串，故此以text格式获取，而不是json格式
+                        success: function (result) {
+                            if (result['status'] = "success") {
+                                var imgNode = document.createElement("img");
+                                //读取后台返回的图片url
+                                imgNode.src = result['imageurl'];
+                                imgNode.width = 600;
+                                $('#summernote').summernote('insertNode', imgNode);
+                            }
+                        },
+                        error: function () {
+                            alert("上传图片失败");
+                        }
+                    });
+                }
+            }*/
+        });
+
+
+        $('#summernoteen').summernote({
+            lang: 'zh-CN',
+            placeholder: 'text content...',
+            tabsize: 4,
+            minHeight: 200,
+            //focus: true,
+            toolbar: [
+                ['fontsizestyle', ['fontsize', 'color', 'style', 'paragraph', 'bold']], //字体大小
+                ['style', ['style']],//样式
+                //['para', ['ul', 'ol', 'paragraph']], //无序列表、有序列表、段落对齐方式
+                ['linkpicturevideo', ['link', 'picture', 'video']], //插入链接
+                //['picture',['picture']], //插入图片
+                //['video',['video']], //插入视频
+                ['fullscreencodeview', ['fullscreen', 'codeview']], //全屏
+                //['codeview',['codeview']], //查看html代码
+            ],
+            
+            callbacks: {
+                onImageUpload: function (file) {          //图片默认以二进制的形式存储到数据库，调用此方法将请求后台将图片存储到服务器，返回图片请求地址到前端
+                    //将图片放入Formdate对象中
+                    var formData = new FormData();
+                    //‘picture’为后台获取的文件名，file[0]是要上传的文件
+                    formData.append("picture", file[0]);
+                    $.ajax({
+                        type: 'POST',
+                        url: '/FileUpload/SingleFileUpload',                   //请求后台地址
+                        cache: false,
+                        data: formData,
+                        processData: false,
+                        contentType: false,
+                        dataType: 'json',               
+                        headers: {
+                            "Authorization": "Bearer " + $.cookie("tkkz")
+                        },
+                        success: function (result) {
+                            if (result['isSuccess'] == "true") {
+                                var imgNode = document.createElement("img");
+                                //读取后台返回的图片url
+                                imgNode.src = result['completeFilePath'];
+                                imgNode.width = 600;
+                                $('#summernoteen').summernote('insertNode', imgNode);
+                            }
+                        },
+                        error: function () {
+                            alert("UpImageError");
+                        }
+                    });
+                }
+            }
+        });
+
+
+
+        ////发表确定按键事件
+        $('#titleadd').click(function () {
+            var pda = {
+                title: "",
+                contenten: $('#summernoteen').summernote('code'),
+                contentcn: $('#summernotecn').summernote('code'),
+                pass: '',
+            }
+
+            $.ajax({
+                type: 'POST',
+                data: pda,
+                url: '/Title/OnAddDeal',
+                dataType: 'JSON',
+                beforeSend: function () {
+                    //$('#stat').html("正在处理，请稍等！");
+                    $('#titleadd').attr("disabled", true);
+                },
+                headers: {
+                    "Authorization": "Bearer " + $.cookie("tkkz")
+                },
+                success: function (result) {
+                    if (result == "ok") {
+                        $('#titleadd').attr("disabled", false);
+                        $("#infoz").html("ok!");
+                        //$('#stat').html("picture:" + result['titleimgcount'] + "&nbsp;&nbsp;chinese number:" + result['chinesecount']);
+                        //location.replace("/titleview?fid=" + result['titleid']);
+                    } else {
+                        $("#infoz").html("error!");
+                    }
+                },
+                error: function () {
+                }
+            });
+
+
+            /*if ((pda.usertitle == "") || (pda.usercontent == "")) {
+                $('#stat').html("<span class='label label-danger'>不能为空呃!</span>");
+                return;
+            } else if ($('#title').val().length < 4) {
+                $('#stat').html("<span class='label label-danger'>题目字符太少!</span>");
+                return;
+            } else if ($('#summernote').summernote('code').length < 8) {
+                $('#stat').html("<span class='label label-danger'>正文字符太少!</span>");
+                return;
+            } else {*/
+
+            //}
+        });
+               
+
+        $("#titletranslate").click(function () {
+            var appid = '20180807000192443';
+            var key = 'ln48otJTGllzzroH2IB2';
+            var salt = (new Date).getTime();
+            var query = $('#summernotecn').summernote('code');
+            var from = 'zh';
+            var to = 'en';
+            var str1 = appid + query + salt + key;
+            var sign = MD5(str1);
+            var xxx = 'https://fanyi-api.baidu.com/api/trans/vip/translate';
+            $.ajax({
+                url: xxx,
+                type: 'get',
+                contentType: "text/json,charset=utf-8",
+                dataType: 'jsonp',
+                data: {
+                    q: query,
+                    from: from,
+                    to: to,
+                    appid: appid,
+                    salt: salt,
+                    sign: sign,
+                },
+                success: function (result) {
+                    $('#summernoteen').summernote('code',result.trans_result[0].dst)
+                    //alert();
+                },
+            });
+        });
+
+
+
+        www(2,"cn","append");
+     
+
+
+    });
+
+    function www(pageno, lang, flag) {
+        $.ajax({
+            type: "post",
+            url: "/Title/OnTitleList",
+            contenType: "application/json; charset=utf-8",
+            data: { pageno: pageno, lang: lang },
+            dataType: "json",
+            success: function (result) {
+                var j = result.length;
+                var strr = "";
+                if (flag == "append") {
+                    for (var i = 0; i < j; i++) {
+                        strr = strr + '<div class="h4 col-xl-12 col-sm-12 col-md-12 col-lg-12" href="/Title/View?fid=" style="font-size:15px; line-height:23px; color:#333; background-color:#fff; text-decoration-line:none; display:block;  margin:0px; padding-bottom:15px; padding-top:15px; border:1px solid #ddd; min-height:115px; ">';//230
+                        strr = strr + '<span style="color:#996633"><b>' + result[i].datetime + ' | GMT+8</b></span>&nbsp;<br/>';
+                        strr = strr + result[i].contenten;
+                        var lv = result[i].label.split("|");
+                        for (var p = 0; p < (lv.length - 1); p++) {
+                            strr = strr + "<a href='/Detailed/IndexDay?variety=" + lv[p] + "'><img src='/img/" + lv[p] + ".png' width='18px' height='18px'/></a>&nbsp;&nbsp;";
+                        }
+                        strr = strr + "</div>";
+                        $("#titlelistdisplay").append(strr);
+                        strr = "";
+                    }
+                } else {
+                    for (var i = 0; i < j; i++) {
+                        strr = strr + '<div class="h4 col-xl-12 col-sm-12 col-md-12 col-lg-12" href="/Title/View?fid=" style="font-size:15px; line-height:23px; color:#333; background-color:#fff; text-decoration-line:none; display:block;  margin:0px; padding-bottom:15px; padding-top:15px; border:1px solid #ddd; min-height:115px; ">';//230
+                        strr = strr + '<span style="color:#996633"><b>' + result[i].datetime + ' | GMT+8</b></span><br/>';
+                        strr = strr + result[i].contenten;
+                        strr = strr + '</div>';
+                    }
+                    $("#titlelistdisplay").html(strr);
+                }
+            },
+        });
+    }
+
+
+</script>

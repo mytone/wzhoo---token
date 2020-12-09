@@ -1,0 +1,120 @@
+﻿
+@{
+    ViewData["Title"] = "Mkmnooo - Crude oil production cost";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+
+<div class="row">
+
+    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" style="margin-bottom:10px;">
+
+
+        <div class="col-lg-12" style=" padding-bottom:8px; padding-top:10px; background-color:#cecece;">
+            <div class="row">
+                <div class="col-xl-6 col-lg-6 col-md-12 col-xs-12">
+                    <h2 style="color:#1f3369;"><b>Crude oil production cost</b></h2>
+                </div>
+                <div class="col-xl-6 col-lg-6 col-md-12 col-xs-12">
+                    <p style="color:#333;  font-size:14px;" id="statisticedisplay"></p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-12" style="font-size:14px; background-color:#ffffff; margin-top:10px; padding-top:20px;">
+            <div class="row" style="padding-left:10px;">
+                <img src="~/img/数据.png" width="28px" height="28px" />
+            </div>
+            <table class="table table-hover table-condensed" style="margin-top:20px; min-height:300px;">
+                <tbody id="tabledisplay">
+                </tbody>
+            </table>
+        </div>
+
+        <div id="bto" class="col-12 text-right">
+            <span style="font-size:14px; margin-right:20px;">Notice: Not guaranteed to be completely accureate,For reference only.</span>
+            <a href="#"><img src="~/img/置顶.png" width="30px" height="30px" /></a>
+        </div>
+
+
+    </div>
+</div>
+
+
+
+
+
+@section Scripts
+{
+    @{ await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
+    <script type="text/javascript" language="JavaScript">
+
+        var pageno = 0;
+
+        function kkk() {
+            var str="";
+            $.ajax({
+                type: "post",
+                url: "/Detailed/OnStatistics",
+                contenType: "application/json; charset=utf-8",
+                data: { variety: 'crudeoilcost'},
+                dataType: "json",
+                beforeSend: function () {
+                    $("#statisticedisplay").html("<span style='color:#336699;'><b>Loading data......</b></span");
+                },
+                success: function (result) {
+                    str = str + result[3];
+                    str = str + ' | Time limit:<b>' + result[2] + ' - ' + result[1] + '</b ><br />The amount of data:<b>' + result[0] + '( Display data: top  )</b>';
+                    $("#statisticedisplay").html(str);
+                }
+            });
+        }
+
+        function jjj(scount) {
+            var strr = '';
+            $.ajax({
+                type: "post",
+                url: "/Detailed/OnIndexGeneral",
+                contenType:"application/json;charset=UTF-8",
+                data: { variety: 'crudeoilcost' },
+                dataType: "json",
+                headers: {
+                    "Authorization":"Bearer " + $.cookie("tkkz")
+                },
+                beforeSend: function () {
+                    $("#tabledisplay").html("<span style='color:#336699;'><b>Loading data......</b></span");
+                },
+                success: function (result) {
+                    var j = result.length;
+                    strr = strr + '<tr style="background-color:#eee"><td style="padding-left:0px;"><b>DateTime</b></td>';
+                    strr = strr + '<td><b>Country</b></td>';
+                    strr = strr + '<td><b>Cost(USD)</b></td>';
+                    strr = strr + '</tr>';
+                    for (var i = 0; i < j; i++) {
+                        strr = strr + '<tr>';
+                        strr = strr + '<td style="padding-left:0px;">' + result[i].Datetime.replace("0:00:00", "") + '</td>';
+                        strr = strr + '<td>' + result[i].Country + '</td>';
+                        strr = strr + '<td><b>' + result[i].Cost + '</b></td>';
+                        strr = strr + '</tr>';
+                    }
+                    $("#tabledisplay").html(strr);
+                }
+            });
+        }
+
+        $(document).ready(function () {
+            kkk();
+            jjj(99999);
+        })
+
+
+
+
+
+
+    </script>
+
+}
+

@@ -1,0 +1,82 @@
+﻿@{
+    ViewData["Title"] = "Wzhoo.com Fund Anaylsis";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<div class="row" id="toppp">
+
+    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" style="margin-bottom:10px;">
+        <div class="thumbnail" style="background-color:#efefef; ">
+            <div class="caption">
+                <h3 class="h2" href="/Detailed/Index?variety=6b_day" style="color:#1f3369"><b>Fund Anaylsis</b> Anaylsis</h3>
+                <p style="color:#333;  font-size:14px; " id="statisticedisplay">
+
+                </p>
+                <p style="text-align:right; height:20px;">
+
+
+                </p>
+                <div style="font-size: 14px;">
+                    <table class="table table-hover table-condensed" id="qiliangqifei">
+                        <tbody id="tabledisplay">
+                        </tbody>
+                    </table>
+                </div>
+                <div class="text-center" style="margin-top:50px; margin-bottom:60px;">
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+@section Scripts
+{
+    @{ await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script type="text/javascript" language="JavaScript">
+
+        function ppp() {
+            var strr='';
+            $.ajax({
+                type: "post",
+                url: "/Anaylsis/OnFundAnaylsisList",
+                contenType: "application/json; charset=utf-8",
+                dataType: "json",
+                data: "",
+                beforeSend: function () {
+                    $("#tabledisplay").html("<span style='color:#336699;'><b>Loading data......</b></span");
+                },
+                success: function (result) {
+   
+                    var j = result.length;
+                    strr = strr + '<tr style="background-color:#ddd"><td style="padding-left:0px;"><b>Name</b></td>';
+                    strr = strr + '<td><b>Code</b></td><td><b>YearCount</b></td><td><b>Scale</b></td><td><b>GoodPoint</b></td><td><b>ShortComing</b></td>';
+                    strr = strr + '<td><b>AvgEsResponseRate</b></td><td><b>Score</b></td></tr>';
+                    for (var i = 0; i < j; i++){
+                        strr = strr + '<tr>';
+                        strr = strr + '<td style="padding-left:0px; ">' + result[i].name + '</td>';
+                        strr = strr + '<td style="">' + result[i].code  + '</td>';
+                        strr = strr + '<td>' + result[i].createtime + '</td>';
+                        strr = strr + '<td>' + result[i].scale + '</td>';
+                        strr = strr + '<td>' + result[i].countcode + '</td>';
+                        strr = strr + '<td>-' + result[i].countcode_j + '</td>';
+                        strr = strr + '<td>' + result[i].esyearrr + '</td>';
+                        strr = strr + '<td>' + (result[i].countcode-result[i].countcode_j) + '</td>';
+                        strr = strr + '</tr>';
+                    }
+                    $("#tabledisplay").html(strr);
+                }
+            });
+        }
+
+        $(document).ready(function () {
+            //kkk();
+            ppp();
+
+        })
+
+    </script>
+}

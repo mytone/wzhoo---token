@@ -1,0 +1,26 @@
+﻿
+@{
+    ViewData["Title"] = "Map";
+}
+        <div class="row">
+
+            @foreach (var item in Model)
+            {
+
+                    <a id="@item.id" class="h4 col-xl-12 col-sm-12 col-md-12 col-lg-12 col-xs-12"  href="@item.link" style="display:block; padding-bottom:18px; margin:0px; padding-top:16px;  float:left;">
+                        <span style="font-size:19px;">
+                            <b>@item.name</b>
+                        </span>
+                        <span style="color:#663; font-size:13px; ">
+                            <b>@item.level</b>
+                        </span>
+                        
+                        <span style="font-size:13px; line-height:16px; color:#777; display:block;">
+                            @item.link
+                        </span>
+                    </a>
+                
+            }
+      
+
+        </div>

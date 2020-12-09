@@ -1,0 +1,503 @@
+﻿@{
+    ViewData["Title"] = "mkmnooo " + ViewBag.variety + " vs " + ViewBag.finvariety + " Anaylsis";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<script src="~/js/commontools.js"></script>
+
+<div class="row" id="toppp">
+    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" style="margin-bottom:10px;">
+
+        <div class="col-lg-12" style=" background-color:#cecece; border-left:2px solid #525f83; ">
+            <div class="row">
+                <div class="col-md-11 col-9" style=" padding-bottom:8px; padding-top:10px;">
+                    <h5 href="/Detailed/Index?variety=6b_day" style="color:#1f3369;  margin-top:4px;">
+                        <b>@ViewBag.variety - @ViewBag.finvariety</b>
+                    </h5>
+
+                </div>
+                <div class="col-md-1 col-3 text-right" style="background-image:url(/img/bg1.jpg);padding:13px 15px 13px 0;">
+                    <span style="font-size:13px; color:#fff; ">
+                        <b>
+                            Time zone GMT-5
+                        </b>
+                    </span>
+                </div>
+            </div>
+        </div>
+
+        <!--new chart baidu-->
+        <div class="col-12" style="background-color:#fefefe; margin-top:15px; padding-top:15px;">
+            <div id="main" class="col-12" style="        height: 350px;
+        margin: 0p;
+        padding: 0px;
+">
+            </div>
+            <div id="main2" class="col-12" style="height:320px; margin:0px; padding:0px;">
+            </div>
+        </div>
+        <div class="col-12 text-left" style="padding:0px; margin:5px 0 0 0;">
+            <button type="button" class="btn btn-info btn-sm" onclick="javascript: mmm(30);" style="margin-top:5px;">M</button>
+            <button type="button" class="btn btn-info btn-sm" onclick="javascript: mmm(365);" style="margin-top:5px;">Y</button>
+            <button type="button" class="btn btn-info btn-sm" onclick="javascript: mmm(730);" style="margin-top:5px;">2Y</button>
+            <button type="button" class="btn btn-info btn-sm" onclick="javascript: mmm(1080);" style="margin-top:5px;">3Y</button>
+            <button type="button" class="btn btn-info btn-sm" onclick="javascript: mmm(1460);" style="margin-top:5px;">4Y</button>
+            <button type="button" class="btn btn-info btn-sm" onclick="javascript: mmm(1825); " style="margin-top:5px;">5Y</button>
+            <button type="button" class="btn btn-info btn-sm" onclick="javascript: mmm(2920); " style="margin-top:5px;">8Y</button>
+            <button type="button" class="btn btn-info btn-sm" onclick="javascript: mmm(3650); " style="margin-top:5px;">10Y</button>
+            <button type="button" class="btn btn-info btn-sm" onclick="javascript: mmm(99999);" style="margin-top:5px;"> All </button>
+            <a href="/Detailed/IndexDay?variety=@ViewBag.variety" class=" btn btn-success btn-sm" style="margin-top:5px;">@ViewBag.variety</a>
+            <a href="/Calendar/VarietyCalendar?variety=@ViewBag.finvariety" class="btn btn-success btn-sm" style="margin-top:5px;">@ViewBag.finvariety</a>
+        </div>
+        <div class="row" style="margin:30px 0 20px 0; padding:0px;">
+
+
+            <div class="col-12" style="margin:20px 0 0 0; ">
+                <div class="row">
+                    <div style="background-color:rgba(93, 90, 145, 0.8); font-size:13px; margin:0px; line-height:40px; border-left:1px solid #dedede; border-top:1px solid #dedede; padding:5px 0px 5px 0px; color:#fff;" class="col-md-4 col-4 text-center">Actual > Forecast</div>
+                    <div id="gz" style="background-color:#eee; color:#ff6a00;font-size:14px; margin:0px; line-height:20px; border-left:1px solid #dedede; border-top:1px solid #dedede; padding:5px 0px 5px 0px;" class="col-2 text-center"></div>
+                    <div id="gd" style="background-color:#eee;  font-size:14px; margin:0px; line-height:20px; border-left:1px solid #dedede; border-top:1px solid #dedede; padding:5px 0px 5px 0px;" class="col-2 text-center"></div>
+                    <div id="gzz" style="background-color:#eee; color:#ff6a00;font-size:14px; margin:0px; line-height:20px; border-left:1px solid #dedede; border-top:1px solid #dedede; padding:5px 0px 5px 0px;" class="col-2 text-center"></div>
+                    <div id="gdz" style="background-color:#eee;  font-size:14px; margin:0px; line-height:20px; border-left:1px solid #dedede; border-top:1px solid #dedede; padding:5px 0px 5px 0px;" class="col-2 text-center"></div>
+                </div>
+            </div>
+
+            <div class="col-12" style="margin:0px 0 0 0; ">
+                <div class="row">
+                    <div style="background-color:rgba(93, 90, 145, 0.5); font-size:13px; margin:0px; line-height:18px; border-left:1px solid #dedede; border-top:1px solid #dedede; padding:5px 0px 5px 0px; color:#fff;" class="col-md-4 col-4 text-center">Actual > Forecast <br /> Actual>0</div>
+                    <div id="gztf" style="background-color:#eee;color:#ff6a00; font-size:14px; margin:0px; line-height:20px; border-left:1px solid #dedede; border-top:1px solid #dedede; padding:5px 0px 5px 0px;" class="col-2 text-center"></div>
+                    <div id="gzt" style="background-color:#eee;  font-size:14px; margin:0px; line-height:20px; border-left:1px solid #dedede; border-top:1px solid #dedede; padding:5px 0px 5px 0px;" class="col-2 text-center"></div>
+                    <div id="gztzf" style="background-color:#eee;color:#ff6a00;  font-size:14px; margin:0px; line-height:20px; border-left:1px solid #dedede; border-top:1px solid #dedede; padding:5px 0px 5px 0px;" class="col-2 text-center"></div>
+                    <div id="gztz" style="background-color:#eee; font-size:14px; margin:0px; line-height:20px; border-left:1px solid #dedede; border-top:1px solid #dedede; padding:5px 0px 5px 0px;" class="col-2 text-center"></div>
+                </div>
+            </div>
+
+            <div class="col-12" style="margin:20px 0 0 0; ">
+                <div class="row">
+                    <div style="background-color:rgba(93, 90, 145, 0.8); font-size:13px; margin:0px; line-height:40px; border-left:1px solid #dedede; border-top:1px solid #dedede; padding:5px 0px 5px 0px; color:#fff;" class="col-md-4 col-4 text-center">Actual < Forecast</div>
+                    <!--<div id="f" style="background-color:#fff; font-size:18px; margin:0px; line-height:20px; border-left:1px solid #dedede; border-top:1px solid #dedede; padding:5px 0px 5px 0px;" class="col-md-1 col-4 text-center"></div>-->
+                    <div id="fz" style="background-color:#eee;  font-size:14px; margin:0px; line-height:20px; border-left:1px solid #dedede; border-top:1px solid #dedede; padding:5px 0px 5px 0px;" class="col-2 text-center"></div>
+                    <div id="fd" style="background-color:#eee;color:#ff6a00; font-size:14px; margin:0px; line-height:20px; border-left:1px solid #dedede; border-top:1px solid #dedede; padding:5px 0px 5px 0px;" class="col-2 text-center"></div>
+                    <div id="fzz" style="background-color:#eee;  font-size:14px; margin:0px; line-height:20px; border-left:1px solid #dedede; border-top:1px solid #dedede; padding:5px 0px 5px 0px;" class="col-2 text-center"></div>
+                    <div id="fdz" style="background-color:#eee;color:#ff6a00; font-size:14px; margin:0px; line-height:20px; border-left:1px solid #dedede; border-top:1px solid #dedede; padding:5px 0px 5px 0px;" class="col-2 text-center"></div>
+
+                </div>
+            </div>
+
+            <div class="col-12" style="margin:0px 0 0 0;">
+                <div class="row">
+                    <div style="background-color:rgba(93, 90, 145, 0.5); font-size:13px; margin:0px; line-height:18px; border-left:1px solid #dedede; border-top:1px solid #dedede; padding:5px 0px 5px 0px; color:#fff;" class="col-md-4 col-4 text-center">Actual < Forecast <br /> Actual<0</div>
+                    <div id="gdt" style="background-color:#eee; font-size:14px; margin:0px; line-height:20px; border-left:1px solid #dedede; border-top:1px solid #dedede; padding:5px 0px 5px 0px;" class="col-2 text-center"></div>
+                    <div id="gdtf" style="background-color:#eee;color:#ff6a00;  font-size:14px; margin:0px; line-height:20px; border-left:1px solid #dedede; border-top:1px solid #dedede; padding:5px 0px 5px 0px;" class="col-2 text-center"></div>
+                    <div id="gdtz" style="background-color:#eee; font-size:14px; margin:0px; line-height:20px; border-left:1px solid #dedede; border-top:1px solid #dedede; padding:5px 0px 5px 0px;" class="col-2 text-center"></div>
+                    <div id="gdtzf" style="background-color:#eee;color:#ff6a00;  font-size:14px; margin:0px; line-height:20px; border-left:1px solid #dedede; border-top:1px solid #dedede; padding:5px 0px 5px 0px;" class="col-2 text-center"></div>
+                </div>
+            </div>
+
+        </div>
+
+
+        <div class="col-12" style="font-size:14px; background-color:#ffffff; margin-top:20px; padding-top:0px;">
+            <div class="row" id="tabledisplay" style=" padding-bottom: 15px;">
+            </div>
+        </div>
+
+        <div id="bto" class="col-12 text-right">
+            <span style="font-size:14px; margin-right:20px;">Notice: Not guaranteed to be completely accureate,For reference only.</span>
+            <a href="#"><img src="~/img/置顶.png" width="30px" height="30px" /></a>
+        </div>
+
+    </div>
+
+    @section Scripts
+{
+        @{ await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+        <script type="text/javascript" language="JavaScript">
+
+
+    var pageno = 0;
+    function kkk() {
+            var str="";
+            $.ajax({
+                type: "post",
+                url: "/Detailed/OnStatistics",
+                contenType: "application/json; charset=utf-8",
+                data: { variety: '@ViewBag.variety' },
+                dataType: "json",
+                beforeSend: function () {
+                    $("#statisticedisplay").html("<span style='color:#336699;'><b>Loading data......</b></span");
+                },
+                success: function (result) {
+                    str = str + result[3]+ '&nbsp;&nbsp; Not guaranteed to be completely accureate,For reference only.<br /> ';
+                    str = str + 'Time limit: <b>' + result[2] + ' - ' + result[1] + '</b ><br />The amount of data: <b>' + result[0] + '( Display data: top  )</b>';
+                    $("#statisticedisplay").html(str);
+                }
+            });
+    }
+
+    function mmm(scount) {
+        jjj(scount);
+    }
+
+    function jjj(scount) {
+
+        var strr = '';
+
+            $.ajax({
+                type: "post",
+                url: "/Anaylsis/OnTableFinAnaylsisList",
+                contenType: "application/json; charset=utf-8",
+                data: { variety: '@ViewBag.variety',finvariety:'@ViewBag.finvariety',level:'@ViewBag.level',pageno:scount,currency:'@ViewBag.currency'},
+                dataType: "json",
+                beforeSend: function () {
+                    $("#tabledisplay").html("<span style='color:#336699;'><b>Loading data......</b></span");
+                },
+                success: function (result) {
+
+                    var kdata = new Array();
+                    var j = result.length;
+                    var strDataClose = new Array();
+                    var strDataClose2 = new Array();
+                    var strDay = new Array();
+                    var tt;
+
+                    strr = strr + '<div class="col-xl-2 col-lg-2 col-md-2 col-4" style="border-bottom:1px solid #dedede;  line-height:40px;"><b>DateTime</b></div>';
+                    strr = strr + '<div class="col-xl-1 col-lg-1 col-md-1 d-none d-md-block" style="border-bottom:1px solid #dedede; line-height:40px;"><b>Open</b></div>';
+                    strr = strr + '<div class="col-xl-1 col-lg-1 col-md-1 d-none d-md-block" style="border-bottom:1px solid #dedede;line-height:40px;"><b>High</b></div>';
+                    strr = strr + '<div class="col-xl-1 col-lg-1 col-md-1 d-none d-md-block" style="border-bottom:1px solid #dedede;line-height:40px;"><b>Low</b></div>';
+                    strr = strr + '<div class="col-xl-1 col-lg-1 col-md-1 col-4" style="border-bottom:1px solid #dedede;line-height:40px;"><b>Close</b></div>';
+                    strr = strr + '<div class="col-xl-1 col-lg-1 col-md-1 d-none d-md-block" style="border-bottom:1px solid #dedede;  line-height:40px; background-color:#eee;"><b>Currency</b></div>';
+                    strr = strr + '<div class="col-xl-3 col-lg-3 col-md-3 d-none d-md-block" style="border-bottom:1px solid #dedede;  line-height:40px; background-color:#eee;" ><b>Event</b></div>';
+                    strr = strr + '<div class="col-xl-1 col-lg-1 col-md-1 d-none d-md-block" style="border-bottom:1px solid #dedede;  line-height:40px; background-color:#eee;"><b>Forecast</b></div>';
+                    strr = strr + '<div class="col-xl-1 col-lg-1 col-md-1 col-4" style="border-bottom:1px solid #dedede;  line-height:40px; background-color:#eee;"><b>Actual</b></div>';
+
+                    for (var i = 0; i < j; i++){
+
+                        strr = strr + '<div class="col-xl-2 col-lg-2 col-md-2 col-4 " style="border-bottom:1px solid #dedede; line-height:40px;"><a href="/Detailed/IndexMinute?variety=@ViewBag.Variety&datez=' + result[i].datetime+'">' + result[i].datetime + '</a></div>';
+                        strr = strr + '<div class="col-xl-1 col-lg-1 col-md-1 d-none d-md-block" style="border-bottom:1px solid #dedede;  line-height:40px;">' + result[i].open + '</div>';
+                        strr = strr + '<div class="col-xl-1 col-lg-1 col-md-1 d-none d-md-block" style="border-bottom:1px solid #dedede;  line-height:40px;" >' + result[i].high + '</div>';
+                        strr = strr + '<div class="col-xl-1 col-lg-1 col-md-1 d-none d-md-block" style="border-bottom:1px solid #dedede;  line-height:40px;">' + result[i].low + '</div>';
+                        strr = strr + '<div class="col-xl-1 col-lg-1 col-md-1 col-4 " style="border-bottom:1px solid #dedede;  line-height:40px;">' + result[i].close + '</div>';
+                        strr = strr + '<div class="col-xl-1 col-lg-1 col-md-1 d-none d-md-block" style="border-bottom:1px solid #dedede;  line-height:40px; color:#6cb041; background-color:#eee;"><b>' + result[i].currency + '</b></div>';
+                        strr = strr + '<div class="col-xl-3 col-lg-3 col-md-3 d-none d-md-block" style="border-bottom:1px solid #dedede;  line-height:40px; color:#6cb041; background-color:#eee;" ><b>' + result[i].eventz + '</b></div>';
+                        strr = strr + '<div class="col-xl-1 col-lg-1 col-md-1 d-none d-md-block" style="border-bottom:1px solid #dedede;  line-height:40px; color:#6cb041; background-color:#eee;"><b>' + result[i].forecast + '</b></div>';
+                        strr = strr + '<div class="col-xl-1 col-lg-1 col-md-1 col-4" style="border-bottom:1px solid #dedede;  line-height:40px;  color:#6cb041; background-color:#eee;"><b>' + result[i].actual + '</b></div>';
+
+                        kdata[i] = new Array();
+                        kdata[i][0] = result[i].datetime;
+                        kdata[i][1] = result[i].open;
+                        kdata[i][2] = result[i].close;
+                        kdata[i][3] = result[i].low;
+                        kdata[i][4] = result[i].high;
+                        kdata[i][5] = result[i].currency;
+                        kdata[i][6] = result[i].eventz;
+                        kdata[i][7] = result[i].forecast;
+                        kdata[i][8] = result[i].actual;
+
+                        strDataClose[i] = result[i].close;
+                        tt = result[i].actual;
+                        if (tt != null || tt != "") {
+                            tt = tt.replace("M", "");
+                            tt = tt.replace("%", "");
+                            tt = tt.replace("HK", "");
+                            tt = tt.replace("Kr", "");
+                            tt = tt.replace("B", "");
+                            tt = tt.replace("$", "");
+                            tt = tt.replace("K", "");
+                            tt = tt.replace("£", "");
+                            tt = tt.replace("€", "");
+                            tt = tt.replace("R", "");
+                        }
+                        strDataClose2[i] = tt;
+                        strDay[i] = result[i].datetime;
+
+                    }
+                    var ydata = new Array();
+                    ydata = mytone_varfin(kdata.reverse());
+
+                    $("#d").html("<span style='font-size:12px; margin-bottom:10px;'>Up</span><br/><b>" + ydata[0] + "</b><br/>");
+                    $("#x").html("<span style='font-size:12px; margin-bottom:10px;'>Down</span><br/><b>" + ydata[1] + "</b><br/>");
+                    $("#dz").html("<span style='font-size:12px; margin-bottom:10px;'>UpPoints</span><br/><b>" + ydata[2] + "</b><br/>");
+                    $("#xz").html("<span style='font-size:12px; margin-bottom:10px;'>DownPoints</span><br/><b>" + ydata[3] + "</b><br/>");
+
+                    $("#gz").html("<span style='font-size:12px; margin-bottom:10px;'>Up</span><br/><b>" + ydata[6] + "</b><br/>");
+                    $("#gd").html("<span style='font-size:12px; margin-bottom:10px; '>Down</span><br/><b>" + ydata[7] + "</b><br/>");
+                    $("#gzz").html("<span style='font-size:12px; margin-bottom:10px;'>UpPoints</span><br/><b>" + ydata[10] + "</b><br/>");
+                    $("#gdz").html("<span style='font-size:12px; margin-bottom:10px;'>DownPoints</span><br/><b>" + ydata[11] + "</b><br/>");
+
+                    $("#gztf").html("<span style='font-size:12px; margin-bottom:10px;'>Up</span><br/><b>" + ydata[18] + "</b><br/>");
+                    $("#gzt").html("<span style='font-size:12px; margin-bottom:10px;'>Down</span><br/><b>" + ydata[14] + "</b><br/>");
+                    $("#gztzf").html("<span style='font-size:12px; margin-bottom:10px;'>UpPoints</span><br/><b>" + ydata[20] + "</b><br/>");
+                    $("#gztz").html("<span style='font-size:12px; margin-bottom:10px;'>DownPoints</span><br/><b>" + ydata[16] + "</b><br/>");
+
+                    $("#fz").html("<span style='font-size:12px; margin-bottom:10px;'>Up</span><br/><b>" + ydata[8] + "</b><br/>");
+                    $("#fd").html("<span style='font-size:12px; margin-bottom:10px;'>Down</span><br/><b>" + ydata[9] + "</b><br/>");
+                    $("#fzz").html("<span style='font-size:12px; margin-bottom:10px;'>UpPoints</span><br/><b>" + ydata[12] + "</b><br/>");
+                    $("#fdz").html("<span style='font-size:12px; margin-bottom:10px;'>DownPoints</span><br/><b>" + ydata[13] + "</b><br/>");
+
+                    $("#gdt").html("<span style='font-size:12px; margin-bottom:10px;'>Up</span><br/><b>" + ydata[15] + "</b><br/>");
+                    $("#gdtf").html("<span style='font-size:12px; margin-bottom:10px;'>Down</span><br/><b>" + ydata[19] + "</b><br/>");
+                    $("#gdtzf").html("<span style='font-size:12px; margin-bottom:10px;'>DownPoints</span><br/><b>" + ydata[21] + "</b><br/>");
+                    $("#gdtz").html("<span style='font-size:12px; margin-bottom:10px;'>UpPoints</span><br/><b>" + ydata[17] + "</b><br/>");
+
+                    $("#tabledisplay").html(strr);
+
+                    var myChart = echarts.init(document.getElementById('main'));// 基于准备好的dom，初始化echarts实例
+
+                        var option = {
+
+                            title: {
+                                text: '@ViewBag.Variety',
+                                color: '#105712',
+                                x: 'center',
+                                textStyle: {
+                                    fontSize: 16,
+                                },
+                            },
+
+                            grid: {
+                                left: 60,
+                                right: "1%",
+                                height: "75%",
+                                bottom: "13%",
+                            },
+
+                            tooltip: {
+                                trigger: 'axis',
+                                axisPointer: {
+                                    type: 'cross'
+                                },
+                                backgroundColor: '#666',
+                                borderWidth: 0,
+                                borderColor: '#ccc',
+                                padding: 10,
+                                textStyle: {
+                                    color: '#eee',
+                                    fontSize: 12,
+                                },
+                                position: function (point, params, dom, rect, size) {
+                                    var x = 0; // x坐标位置
+                                    var y = 0; // y坐标位置
+                                    // 当前鼠标位置
+                                    var pointX = point[0];
+                                    var pointY = point[1];
+
+                                    // 提示框大小
+                                    var boxWidth = size.contentSize[0];
+                                    var boxHeight = size.contentSize[1];
+                                    // boxWidth > pointX 说明鼠标左边放不下提示框
+                                    if (boxWidth > pointX) {
+                                        x = 5;
+                                    } else { // 左边放的下
+                                        x = pointX - boxWidth;
+                                    }
+                                    // boxHeight > pointY 说明鼠标上边放不下提示框
+                                    if (boxHeight > pointY) {
+                                        y = 5;
+                                    } else { // 上边放得下
+                                        y = pointY - boxHeight;
+                                    }
+                                    return [x, y];
+                                },
+
+                                extraCssText: 'width:170px',
+                            },
+
+                            legend: {
+                                data: ['Price']
+                            },
+
+                            xAxis: {
+                                data: strDay.reverse(),
+                                axisLine: {
+                                    lineStyle: {
+                                        color: '#aaa',
+                                        width: 1.2,
+                                    },
+                                },
+                                splitLine: {
+                                    lineStyle: {
+                                        color: '#eee',
+                                    },
+                                    show: true,
+                                },
+                                axisLabel: {
+                                    color: '555',
+                                },
+                            },
+
+                            yAxis: {
+                                min: 'dataMin', //就是这两个 最小值
+                                max: 'dataMax', //最大值
+                                axisLine: {
+                                    lineStyle: {
+                                        color: '#aaa',
+                                        width: 1.2,
+                                    }
+                                },
+                                splitLine: {
+                                    lineStyle: {
+                                        color: '#eee',
+                                    },
+                                    show: true,
+                                },
+                                axisLabel: {
+                                    color: '#555',
+                                },
+                            },
+
+                            series: [{
+                                name: '@ViewBag.variety',
+                                type: 'line',
+                                data: strDataClose.reverse(),//[5, 20, 36, 10, 10, 20]
+                                smooth: true,
+                                itemStyle: {
+                                    normal: {
+                                        color: '#6cb041',
+                                        lineStyle: {
+                                            width: 1, //设置线条粗细
+                                            color: '#336699',
+                                        }
+                                    }
+                                }
+                            }],
+                        };
+                    myChart.setOption(option);
+
+
+                    var myChart2 = echarts.init(document.getElementById('main2'));// 基于准备好的dom，初始化echarts实例
+
+                        var option = {
+
+                            title: {
+                                text: '@ViewBag.finvariety',
+                                color: '#105712',
+                                x: 'center',
+                                textStyle: {
+                                    fontSize: 16,
+                                },
+                            },
+
+                            grid: {
+                                left: 60,
+                                right: "1%",
+                                height: "75%",
+                                bottom: "13%",
+                            },
+
+                            tooltip: {
+                                trigger: 'axis',
+                                axisPointer: {
+                                    type: 'cross'
+                                },
+                                backgroundColor: '#666',
+                                borderWidth: 0,
+                                borderColor: '#ccc',
+                                padding: 10,
+                                textStyle: {
+                                    color: '#eee',
+                                    fontSize: 12,
+                                },
+                                position: function (point, params, dom, rect, size) {
+                                    var x = 0; // x坐标位置
+                                    var y = 0; // y坐标位置
+                                    // 当前鼠标位置
+                                    var pointX = point[0];
+                                    var pointY = point[1];
+
+                                    // 提示框大小
+                                    var boxWidth = size.contentSize[0];
+                                    var boxHeight = size.contentSize[1];
+                                    // boxWidth > pointX 说明鼠标左边放不下提示框
+                                    if (boxWidth > pointX) {
+                                        x = 5;
+                                    } else { // 左边放的下
+                                        x = pointX - boxWidth;
+                                    }
+                                    // boxHeight > pointY 说明鼠标上边放不下提示框
+                                    if (boxHeight > pointY) {
+                                        y = 5;
+                                    } else { // 上边放得下
+                                        y = pointY - boxHeight;
+                                    }
+                                    return [x, y];
+                                },
+
+                                extraCssText: 'width:230px',
+                            },
+
+                            legend: {
+                                data: ['Price']
+                            },
+
+                            xAxis: {
+                                data: strDay,
+                                axisLine: {
+                                    lineStyle: {
+                                        color: '#aaa',
+                                        width: 1.2,
+                                    },
+                                },
+                                splitLine: {
+                                    lineStyle: {
+                                        color: '#eee',
+                                    },
+                                    show: true,
+                                },
+                                axisLabel: {
+                                    color: '555',
+                                },
+                            },
+
+                            yAxis: {
+                                min: 'dataMin', //就是这两个 最小值
+                                max: 'dataMax', //最大值
+                                axisLine: {
+                                    lineStyle: {
+                                        color: '#aaa',
+                                        width: 1.2,
+                                    }
+                                },
+                                splitLine: {
+                                    lineStyle: {
+                                        color: '#eee',
+                                    },
+                                    show: true,
+                                },
+                                axisLabel: {
+                                    color: '#555',
+                                },
+                            },
+
+                            series: [{
+                                name: '@ViewBag.finvariety',
+                                type: 'bar',
+                                data: strDataClose2.reverse(),      //[5, 20, 36, 10, 10, 20]
+                                smooth: true,
+                                itemStyle: {
+                                    normal: {
+                                        color: '#6cb041',
+                                        lineStyle: {
+                                            width: 1, //设置线条粗细
+                                            color: '#996633',
+                                        }
+                                    }
+                                }
+                            }],
+                        };
+                    myChart2.setOption(option);
+
+
+                }
+            });
+    }
+
+    $(document).ready(function () {
+            //kkk();
+            jjj(365);
+
+    })
+
+        </script>
+    }
+
+

@@ -1,0 +1,124 @@
+﻿@{
+    ViewData["Title"] = "Search wzhooo.com";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<div class="row">
+  
+    <div class="col-12 mt-4 mb-5">
+        <div class="row">
+
+            <div class="col-12 mb-5 text-center" style="font-size:16px;">
+                Search - Query keywords:  <b>@ViewBag.searchtext</b>
+            </div>
+
+            <div class="col-12">
+                <div id="titlelistdisplay" class="row">
+                </div>
+                <div class="row mt-3" style=" ">
+                    <div class="col-10  text-right">
+                        <button id="moredeal" class="btn btn-secondary">more</button>&nbsp;&nbsp;
+                        <a id="langcndeal" href="#">
+                            <img src='~/img/中文.png' style='width: 30px; height:30px;' />
+                        </a>
+                    </div>
+                    <div class="col-2 text-right" style="">
+                        <span class="p-2 text-right" style="font-size:13px; color:#fff; background-image:url(/img/bg1.jpg); height:100%; display:block;">
+                            <b>
+                                GMT-5
+                            </b>
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+
+        </div>
+    </div>           
+
+</div>
+
+
+
+@section Scripts
+{
+    @{ await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script type="text/javascript" language="JavaScript">
+
+        var titlepageno = 1;
+        var lang = "en";
+
+        function www(pageno, lang, flag) {
+            $.ajax({
+            type: "post",
+            url: "/Home/OnTitleSearchList",
+            contenType: "application/json; charset=utf-8",
+            data: { pageno: pageno, lang: lang , searchtext: '@ViewBag.searchtext'},
+            dataType: "json",
+            beforeSend: function () {
+            },
+            success: function (result) {
+                var j = result.length;
+                var strr = "";
+                if (flag == "append") {
+                    for (var i = 0; i < j; i++) {
+                        strr = strr + '<div class="h4 col-lg-4 col-md-6 col-12 ">';
+                        strr = strr + '<div class="row no-gutters  overflow-hidden flex-md-row mb-3 h-md-250 position-relative bg-white p-3" style = "border-top:1px solid #ccc;  font-size:15px; line-height:23px; color:#333;  display:block;" > ';
+                        strr = strr + '<div style="min-height:120px;">' + result[i].contenten + '</div>';
+
+                        var lv = result[i].label.split("|");
+                        strr = strr + "<div class='mt-1 align-bottom' style='height:30px; width:100%;'>";
+                        for (var p = 0; p < (lv.length - 1); p++) {
+                            strr = strr + "<a href='/Detailed/IndexDay?variety=" + lv[p] + "' ><img src='/img/" + lv[p] + ".png' width='18px' height='18px'/></a>&nbsp;&nbsp;&nbsp;";
+                        }
+                        strr = strr + '<span class="align-bottom text-right mt-1" style="color:#996633; font-size:12px; width:100%;"><b>' + result[i].datetime + ' </b></span></div>';
+                        strr = strr + "</div></div>";
+                        $("#titlelistdisplay").append(strr);
+                        strr = "";
+                    }
+                } else {
+                    for (var i = 0; i < j; i++) {
+                        strr = strr + '<div class="h4 col-lg-4 col-md-6 col-12 ">';
+                        strr = strr + '<div class="row no-gutters  overflow-hidden flex-md-row mb-3 h-md-250 position-relative bg-white p-3" style = "border-top:1px solid #ccc;  font-size:15px; line-height:23px; color:#333;  display:block;" > ';
+                        strr = strr + '<div style="min-height:120px;">' + result[i].contentcn + '</div>';
+
+                        var lv = result[i].label.split("|");
+                        strr = strr + "<div class='mt-1 align-bottom' style='height:30px; width:100%;'>";
+                        for (var p = 0; p < (lv.length - 1); p++) {
+                            strr = strr + "<a href='/Detailed/IndexDay?variety=" + lv[p] + "' ><img src='/img/" + lv[p] + ".png' width='18px' height='18px'/></a>&nbsp;&nbsp;&nbsp;";
+                        }
+                        strr = strr + '<span class="align-bottom text-right mt-1" style="color:#996633; font-size:12px; width:100%;"><b>' + result[i].datetime + ' </b></span></div>';
+                        strr = strr + "</div></div>";
+                        $("#titlelistdisplay").html(strr);
+                        strr = "";
+                    }
+                }
+            },
+            });
+        }
+
+        $("#moredeal").click(function () {
+            titlepageno = titlepageno + 1;
+            www(titlepageno, lang, "append");
+        });
+
+        www(titlepageno, lang, "append");
+
+        $("#langcndeal").click(function () {
+            //titlepageno = 1;
+            lang = "cn";
+            www(titlepageno, lang, "html");
+        });
+
+        $("#langendeal").click(function () {
+            titlepageno = 1;
+            lang = "en";
+            www(titlepageno, lang, "html");
+        });
+
+    </script>
+}
+
+
+

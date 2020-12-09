@@ -1,0 +1,408 @@
+﻿
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<style>
+
+    .bs1 {
+        background-color: #699aa6;
+        color: #fff;        
+        display: block;
+    }
+    .bs1:hover {
+        background-color: #555;
+        color: #1f3369;
+        display: block;
+    }
+
+
+
+    .bs2 {
+        color: #eee;
+        background-color: #766883;
+        display: block;
+    }.bs2:hover {
+            background-color: #334455;
+            color: #fff;
+            display: block;
+        }
+
+
+</style>
+
+<script src="~/js/moment.min.js"></script>
+
+<div class="row">
+
+
+    <div class="col-12 mt-1">
+        <div class="col-12 text-right" style="">
+            <span class="text-right" style="font-size:12px; color:#888;  height:30px; display:block;">
+                <b>
+                    GMT+8
+                </b>
+            </span>
+        </div>
+        <div id="titlelistdisplay" class="row">
+        </div>
+
+        <div class="row mt-3" style=" ">
+            <div class="col-12  text-right">
+                <button id="moredeal" class="btn btn-warning">more</button>&nbsp;&nbsp;&nbsp;
+                <a id="langcndeal" href="#" style="text-decoration:none;">
+                    <img src='~/img/中文.png' style='width: 25px; height:25px;' />
+                </a>
+                &nbsp;
+                <a id="langendeal" href="#" style="text-decoration:none;">
+                    <img src='~/img/英文.png' style='width: 25px; height:25px;' />
+                </a>
+            </div>
+
+        </div>
+    </div>
+
+    <hr style="color:#fff; width:100%;" />
+
+    <div class="col-lg-3 col-md-4 col-12 mt-5 " style="">
+        <div class="row">
+            <div class="col-12 text-sm-center text-md-left" style="line-height:40px; ">
+                <span class="pt-md-0 pt-sm-0 " style="font-size:30px; color:#555;   display:block;border-left:0px solid #335566;">
+                    History Data
+                    <br />
+                    Anaylsis
+                </span>
+                <span class="pt-md-0 pt-sm-0 " style="font-size:16px; color:#555;  display:block;border-left:0px solid #335566; ">
+                    Day Level
+                </span>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="col-lg-9 col-md-8 col-12 mt-5" style="">
+        <div class="row" style="">
+            @foreach (var item in Model)
+            {
+                @if (item.dt == "1")
+                {
+                    <div class="h4 col-xl-2 col-3">
+                        <a class="mb-3 h-md-250  shadow-sm bs1 " href="@item.link" style="text-decoration:none; height:70px; ">
+                            <div class="col-lg-5 col-12 text-lg-right text-center  pt-lg-3 pt-1  " style="float:left; ">
+                                <img src="@item.createtime" width="23" height="23" />
+                            </div>
+                            <div class="col-lg-7 col-12 text-lg-left  text-center  pt-lg-4 pt-2" style="font-size:18px; float:left; ">
+                                @item.name
+                            </div>
+                        </a>
+                    </div>
+                }
+            }
+        </div>
+    </div>
+
+
+    <hr style="color:#fff; width:100%;" />
+
+    <div class="col-lg-9 col-md-8 col-12 mt-5 ">
+        <div class="row">
+
+            <div class="h4 col-lg-4 col-md-6 col-12 ">
+                <a class="mb-3 h-md-250 bs2 p-3" href="/Anaylsis/CLvsEIA" style=" text-decoration:none;   height:70px; ">
+                    <div class="ol-12 align-middle " style="font-size:16px; line-height:15px;">
+                        <b>
+                            CL - EIA
+                        </b>
+                    </div>
+                    <span style="font-size:13px; line-height:16px; color:#bbb; display:block;">
+                    </span>
+                </a>
+            </div>
+
+            <div class="h4 col-lg-4 col-md-6 col-12 ">
+                <a class="mb-3 h-md-250 bs2 p-3" href="/Anaylsis/GCvsNFP" style=" text-decoration:none;   height:70px; ">
+                    <div class="ol-12 align-middle " style="font-size:16px; line-height:10px;">
+                        <b>
+                            GC -  Nonfarm Rayroll
+                        </b>
+                    </div>
+                    <span style="font-size:13px; line-height:16px; color:#bbb; display:block;">
+                    </span>
+
+                </a>
+            </div>
+
+            <div class="h4 col-lg-4 col-md-6 col-12  ">
+                <a class="mb-3 h-md-250 bs2 p-3 shadow-sm" href="/Anaylsis/DXvsNFP" style=" text-decoration:none;   height:70px; ">
+                    <div class="ol-12  " style="font-size:16px; line-height:10px;">
+                        <b>
+                            DX - Nonfarm Rayroll
+                        </b>
+                    </div>
+                    <span style="font-size:13px; line-height:16px; color:#bbb; display:block;">
+
+                    </span>
+
+                </a>
+            </div>
+
+
+            <div class="h4 col-lg-4 col-md-6 col-12 ">
+                <a class="mb-3 h-md-250 bs2 p-3 shadow-sm" href="/Anaylsis/EURGDPqvs6E" style=" text-decoration:none;   height:70px; ">
+                    <div class="ol-12  " style="font-size:16px; line-height:10px;">
+                        <b>
+                            6E - EUR GDP q/q
+                        </b>
+                    </div>
+                    <span style="font-size:13px; line-height:16px; color:#bbb; display:block;">
+                        European Union Gross Domestic Product (GDP) q/q
+                    </span>
+                </a>
+            </div>
+
+
+            <div class="h4 col-lg-4 col-md-6 col-12 ">
+                <a class="mb-3 h-md-250 bs2 p-3 shadow-sm" href="/Anaylsis/IndexTwoVarietyAnaylsis?variety=ssec&variety2=a50&level=day" style=" text-decoration:none;   height:70px; ">
+                    <div class="ol-12  " style="font-size:16px; line-height:10px;">
+                        <b>
+                            SSEC - A50
+                        </b>
+                    </div>
+                    <span style="font-size:13px; line-height:16px; color:#bbb; display:block;">
+                        SSEC china vs SGX A50A50
+                    </span>
+                </a>
+            </div>
+
+
+            <div class="h4 col-lg-4 col-md-6 col-12">
+                <a class="mb-3 h-md-250 bs2 p-3 shadow-sm" href="/Detailed/IndexCrudeOilCost" style=" text-decoration:none;   height:70px; ">
+                    <div class="ol-12  " style="font-size:16px; line-height:10px;">
+                        <b>
+                            Crude Oil Cost
+                        </b>
+                    </div>
+                    <span style="font-size:13px; line-height:16px; color:#bbb; display:block;">
+                        The cost of crude oil production in oil producing countries
+                    </span>
+                </a>
+            </div>
+
+
+            <div class="h4 col-lg-4 col-md-6 col-12">
+                <a class="mb-3 h-md-250 bs2 p-3 shadow-sm" href="/Anaylsis/IndexTwoVarietyAnaylsis?variety=nq&variety2=es&level=day" style=" text-decoration:none;   height:70px; ">
+                    <div class="ol-12  " style="font-size:16px; line-height:10px;">
+                        <b>
+                            NQ vs ES
+                        </b>
+                    </div>
+                    <span style="font-size:13px; line-height:16px; color:#bbb; display:block;">
+                        Comparison between NASDAQ and small S$P Futures
+                    </span>
+                </a>
+            </div>
+
+
+        </div>
+    </div>
+
+    <div class="col-lg-3 col-md-4 col-12 mt-5">
+        <div class="row">
+            <div class="col-12 text-sm-center text-md-right " style="">
+                <span class="pt-md-0 pt-sm-0 pr-md-0" style="font-size:30px; color:#555;  display:block; border-right:0px solid #335566;">
+                    Comparative Anaylsis
+                </span>
+            </div>
+        </div>
+    </div>
+
+    <!--
+    <div class="col-12" style="margin-bottom:30px;">
+        @foreach (var item in Model)
+        {
+            @if (item.dt == "3")
+            {
+                <a id="@item.id" class="h4 col-xl-3 col-sm-6 col-md-4 col-lg-4 col-6" onmouseover="javascript:ov1(@item.id);" onmouseout="ot3(@item.id);" href="@item.link" style="color:#1f3369; background-color:#f3fafa; text-decoration:none; display:block; padding-bottom:18px; margin:0px; padding-top:16px; border:1px solid #dedede; height:115px; float:left;">
+                    <span style="font-size:19px;">
+                        <b>@item.name</b>
+                    </span>
+                    <span style="color:#663; font-size:13px; ">
+                        <b>@item.level</b>
+                    </span>
+                    <br />
+                    <span style="font-size:13px; line-height:16px; color:#777; display:block;">
+                        @item.comment
+                    </span>
+                </a>
+            }
+        }
+    </div>-->
+
+    <hr style="color:#fff; width:100%;" />
+    <div class="col-12 text-right" style="">
+        <span class="text-right" style="font-size:12px; color:#888;  height:30px; display:block;">
+            <b>
+                GMT
+            </b>
+        </span>
+    </div>
+
+    <div class="col-lg-10 offset-lg-1 col-12 mt-2" style=" ">
+        <div class="row">
+            <div class="col-6 text-sm-center text-md-left " style="">
+                <span class="pt-md-0 pt-sm-0 pr-md-0" style="font-size:30px; color:#555;  ">
+                    Calendar
+                </span><br/>
+                <span class="" style="font-size:14px;">
+                    Thanks to the data source: www.tradays.com
+                </span>
+            </div>
+            <div class="col-6 text-right mt-4" style="display:block;">
+                <a class="btn btn-sm btn-warning ml-1" href="/Calendar/Index" style="">more</a>
+            </div>
+        </div>
+    </div>
+
+    <!--
+    <div class="col-12 mt-2" style="height:100%;">
+        <script type="text/javascript" src="https://www.tradays.com/c/js/widgets/calendar/widget.js?8"></script>
+        <div class="col-12" style="background-color:#bb9a9a; height:28px;">
+            <span style="font-size:16px; color:#fff;"><b>Economic Calendar</b> </span>&nbsp;&nbsp;&nbsp;
+            <span style="font-size:10px; color:#666;">External link from mql5.com</span>
+        </div>
+        <div class="col-12" id="economicCalendarWidget" style=""></div>
+        <script type="text/javascript">
+            new economicCalendar({ width: "100%", height: "800px", mode: 1, lang: "en", dateformat: "YMD" });
+        </script>
+    </div>-->
+
+    <div class="col-lg-10 offset-lg-1 col-12 mt-3 mb-5" style="font-size:14px; ">
+        <div class="col-12" style="">
+            <div class="row" id="tabledisplay" style="background-color:#fff;">
+            </div>
+        </div>
+    </div>
+
+
+
+
+</div>
+
+@section Scripts
+{
+    @{ await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script type="text/javascript" language="JavaScript">
+
+
+        var titlepageno = 1;
+        var lang = "en";
+
+
+        function www(pageno, lang, flag) {
+
+            $.ajax({
+                type: "post",
+                url: "/Title/OnTitleList",
+                contenType: "application/json; charset=utf-8",
+                data: { pageno: pageno, lang: lang },
+                dataType: "json",
+                beforeSend: function () {
+                },
+                success: function (result) {
+                    var j = result.length;
+                    var strr = "";
+                    if (flag == "append") {
+                        for (var i = 0; i < j; i++) {
+                            strr = strr + '<div class="h4 col-lg-4 col-md-6 col-12 " >';
+                            strr = strr + '<div class="row no-gutters  overflow-hidden flex-md-row mb-3 h-md-250 position-relative bg-white p-3" style = "border-top:1px solid #ccc;  font-size:15px; line-height:23px; color:#333;  display:block;" > ';
+                            strr = strr + '<div style="min-height:120px;">' + result[i].contenten + '</div>';
+                            var lv = result[i].label.split("|");
+                            strr = strr + "<div class='mt-1 align-bottom' style='height:30px; width:100%;'>";
+                            for (var p = 0; p < (lv.length - 1); p++) {
+                                strr = strr + "<a href='/Detailed/IndexDay?variety=" + lv[p] + "' ><img src='/img/" + lv[p] + ".png' width='18px' height='18px'/></a>&nbsp;&nbsp;&nbsp;";
+                            }
+                            strr = strr + '<span class="align-bottom text-right mt-1" style="color:#996633; font-size:12px; width:100%;"><b>' + result[i].datetime + ' </b></span></div>';
+                            strr = strr + "</div></div>";
+                            $("#titlelistdisplay").append(strr);
+                            strr = "";
+                        }
+                    } else {
+                        for (var i = 0; i < j; i++) {
+                            strr = strr + '<div class="h4 col-lg-4 col-md-6 col-12 " >';
+                            strr = strr + '<div class="row no-gutters  overflow-hidden flex-md-row mb-3 h-md-250 position-relative bg-white p-3" style = "border-top:1px solid #ccc;  font-size:15px; line-height:23px; color:#333;  display:block;" > ';
+                            strr = strr + '<div style="min-height:120px;">' + result[i].contenten + '</div>';
+                            var lv = result[i].label.split("|");
+                            strr = strr + "<div class='mt-1 align-bottom' style='height:30px; width:100%;'>";
+                            for (var p = 0; p < (lv.length - 1); p++) {
+                                strr = strr + "<a href='/Detailed/IndexDay?variety=" + lv[p] + "' ><img src='/img/" + lv[p] + ".png' width='18px' height='18px'/></a>&nbsp;&nbsp;&nbsp;";
+                            }
+                            strr = strr + '<span class="align-bottom text-right mt-1" style="color:#996633; font-size:12px; width:100%;"><b>' + result[i].datetime + ' </b></span></div>';
+                            strr = strr + "</div></div>";
+                        }
+                        $("#titlelistdisplay").html(strr);
+                    }
+                },
+            });
+        }
+
+
+        $("#moredeal").click(function () {
+            titlepageno = titlepageno + 1;
+            www(titlepageno, lang, "append");
+        });
+
+        www(titlepageno, lang, "append");
+
+        $("#langcndeal").click(function () {
+            lang = "cn";
+            www(titlepageno, lang, "html");
+        });
+
+        $("#langendeal").click(function () {
+            //titlepageno = 1;
+            lang = "en";
+            www(titlepageno, lang, "html");
+        });
+
+
+
+        function jjj(datetimez) {
+            var strr = '';
+            $.ajax({
+                type: "post",
+                url: "/Calendar/OnCalendarList",
+                contenType: "application/json;charset=UTF-8",
+                data: { datetime: datetimez },
+                dataType: "json",
+                beforeSend: function () {
+                    $("#tabledisplay").html("<span style='color:#336699;'><b>Loading data......</b></span");
+                },
+                success: function (result) {
+                    var j = result.length;
+                    strr = strr + '<div class="col-xl-2 col-lg-2 col-md-2 d-none d-md-block" style="border-bottom:1px solid #dedede; background-color:#eee;  line-height:40px;"><b>Date</b></div>';
+                    strr = strr + '<div class="col-xl-1 col-lg-2 col-md-2 col-3 " style="border-bottom:1px solid #dedede;background-color:#eee; line-height:40px;"><b>Time</b></div>';
+                    strr = strr + '<div class="col-xl-1 col-lg-2 col-md-2 col-3" style="border-bottom:1px solid #dedede;background-color:#eee; line-height:40px;"><b>Currency</b></div>';
+                    strr = strr + '<div class="col-xl-4 col-lg-2 col-md-2 col-3" style="border-bottom:1px solid #dedede;background-color:#eee; line-height:40px;"><b>Event</b></div>';
+                    strr = strr + '<div class="col-xl-2 col-lg-2 col-md-2 d-none d-md-block " style="border-bottom:1px solid #dedede;background-color:#eee;line-height:40px;"><b>Forecast</b></div>';
+                    strr = strr + '<div class="col-xl-2 col-lg-2 col-md-2 col-3 " style="border-bottom:1px solid #dedede;background-color:#eee;line-height:40px;"><b>Actual</b></div>';
+                    for (var i = 0; i < j; i++) {
+                        strr = strr + '<div class="col-xl-2 col-lg-2 col-md-2 d-none d-md-block " style="border-bottom:1px solid #dedede; line-height:20px; padding-top:10px; padding-bottom:10px;">' + moment(result[i].datetime).add(8, "hours").format("YYYY-MM-DD") + '</div>';
+                        strr = strr + '<div class="col-xl-1 col-lg-2 col-md-2 col-3 " style="border-bottom:1px solid #dedede;  line-height:20px; padding-top:10px; padding-bottom:10px;">' + result[i].time + '</div>';
+                        strr = strr + '<div class="col-xl-1 col-lg-2 col-md-2 col-3" style="border-bottom:1px solid #dedede;  line-height:20px; padding-top:10px; padding-bottom:10px;" >' + result[i].currency + '</div>';
+                        strr = strr + '<div class="col-xl-4 col-lg-2 col-md-2 col-3" style="border-bottom:1px solid #dedede;  line-height:20px; padding-top:10px; padding-bottom:10px;"><a href="/Calendar/VarietyCalendar?variety=' + encodeURI(result[i].eventz) + '"><b>' + result[i].eventz + '</b></a></div>';
+                        strr = strr + '<div class="col-xl-2 col-lg-2 col-md-2 d-none d-md-block " style="border-bottom:1px solid #dedede;  line-height:20px; padding-top:10px; padding-bottom:10px;">' + result[i].forecast + '</div>';
+                        strr = strr + '<div class="col-xl-2 col-lg-2 col-md-2 col-3 " style="border-bottom:1px solid #dedede;  line-height:20px; color:#336699; padding-top:10px; padding-bottom:10px;"><b>' + result[i].actual + '</b></div>';
+                    }
+                    $("#tabledisplay").html(strr);
+                }
+            });
+        }
+        jjj(moment().format("YYYY-MM-DD"));
+
+
+    </script>
+
+}
+
+

@@ -1,0 +1,136 @@
+﻿
+@{
+    ViewData["Title"] = "Wzhoo.com  IndexGeneral";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<div class="row" id="toppp">
+
+    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" style="margin-bottom:10px;">
+        <div class="thumbnail" style="background-color:#efefef; ">
+            <div class="caption">
+                <h3 class="h2" href="/Detailed/Index?variety=6b_day" style="color:#1f3369"><b>@ViewBag.variety</b></h3>
+                <p style="color:#333;  font-size:14px; " id="statisticedisplay"></p>
+                <p style="text-align:right; height:20px;">
+                    <a href="/Home/Index" style="font-size:16px; font-weight:600; color:#248b2f; text-decoration-line:underline;">
+                        Back to Index
+                    </a>
+
+
+                    &nbsp;&nbsp;
+                    <!--
+                    <a href="/Detailed/IndexDayAnaylsis?variety=@ViewBag.variety" style="font-size:20px; font-weight:600; color:#248b2f; text-decoration-line:underline;">
+                        Analysis
+                    </a>
+                    -->
+                </p>
+                <div style="font-size: 14px;">
+                    <table class="table table-hover table-condensed">
+                        <tbody id="tabledisplay">
+                        </tbody>
+                    </table>
+                </div>
+                <div class="text-center" style="margin-top:50px; margin-bottom:60px;">
+                    <!--<a href="/User/Add?variety=@ViewBag.variety" style="font-size:26px; font-weight:600;">Analysis....</a>-->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" style="margin-bottom:30px;" id="chartpp">
+            <a href="#toppp" style="font-size:16px; font-weight:500; color:#248b2f; text-decoration-line:underline;">
+                Back to Top
+            </a>
+
+
+    </div>
+</div>
+@section Scripts
+{
+    @{ await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
+    <script type="text/javascript" language="JavaScript">
+
+
+        var pageno = 0;
+                var strDataClose = new Array();
+                var strDataOpen = new Array();
+        var strDay = new Array();
+
+        function kkk() {
+            var str="";
+            $.ajax({
+                type: "post",
+                url: "/Detailed/OnStatistics",
+                contenType: "application/json; charset=utf-8",
+                data: { variety: '@ViewBag.variety' },
+                dataType: "json",
+                beforeSend: function () {
+                    $("#statisticedisplay").html("<span style='color:#336699;'><b>Loading data......</b></span");
+                },
+                success: function (result) {
+                    str = str + result[3]+ '&nbsp;&nbsp; Not guaranteed to be completely accureate,For reference only.<br /> ';
+                    str = str + 'Time limit: <b>' + result[2] + ' - ' + result[1] + '</b ><br />The amount of data: <b>' + result[0] + '( Display data: top  )</b>';
+                    $("#statisticedisplay").html(str);
+                }
+            });
+        }
+
+        function ppp() {
+            var strr = '';
+            $.ajax({
+                type: "post",
+                url: "/Detailed/OnTableListGeneral",
+                contenType:"application/json;charset=UTF-8",
+                data: { variety: '@ViewBag.variety', pageno: pageno },
+                dataType: "json",
+                headers: {
+                    "Authorization":"Bearer " + $.cookie("tkkz")
+                },
+                beforeSend: function () {
+                    $("#tabledisplay").html("<span style='color:#336699;'><b>Loading data......</b></span");
+                },
+                success: function (result) {
+
+                    var le = result.length;
+                    if (le <= 0) {
+                        $("#tabledisplay").html("No data...");
+                        return;
+                    }
+                    for (var i = 0; i < le; i++){
+                        if (i == 0) {
+                            strr = strr + '<tr style="background-color:#ddd">';
+                            for (var ite in result[i]) {
+                                if (ite.toString() != "id") {
+                                    strr = strr + '<td style="padding-left:0px;"><b>' + ite + '</b></td>';
+                                }
+                            }
+                            strr = strr + '</tr>';
+                        } else {
+                            strr = strr + '<tr>';
+                            for (var ite in result[i]) {
+                                if (ite.toString() != "id") {
+                                    strr = strr + "<td style='padding-left: 0px;'>" + result[i][ite] + "</td>";
+                                }
+
+                            }
+                            strr = strr + "</tr>";
+                        }  
+
+                    }
+                    $("#tabledisplay").html(strr);
+
+                }
+            });
+        }
+
+
+        $(document).ready(function () {
+            kkk();
+            ppp();
+        })
+
+    </script>
+
+}

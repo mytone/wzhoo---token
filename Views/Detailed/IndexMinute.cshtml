@@ -1,0 +1,347 @@
+﻿
+@{
+    ViewData["Title"] = "Mkmnooo.com  Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+
+<div class="row">
+
+    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" style="margin-bottom:10px;">
+
+        
+        <div class="col-12" style=" padding-bottom:8px; padding-top:10px; background-color:#cecece;">
+            <div class="row">
+                <div class="col-xl-1 col-lg-1 col-md-2 col-xs-2" >
+                    <h2 style="color:#1f3369;"><b>@ViewBag.variety</b></h2>
+                    <h6 style="color:#666;">minute</h6>
+                </div>
+                <div class="col-xl-10 col-lg-10 col-md-9 col-xs-10">
+                    <p style="color:#333;  font-size:14px;" id="statisticedisplay"></p>
+                    <input id='datetimepicker1' type='text' readonly class="form_datetime form-control form-control-sm" style="width:200px; border:1px solid #ff6a00; float:left; " placeholder="Select trading day" />
+                    <button id="" class="btn btn-sm btn-info" onclick="javascript: kkk(); " style="float:left; margin-left:5px;">recently</button>
+                    <a href="/Detailed/IndexDay?variety=@ViewBag.variety" class="btn btn-sm btn-info"  style="float:left; margin-left:5px;">Level Day</a>
+                </div>
+                <div class="col-xl-1 col-lg-1 hidden-sm hidden-xs hidden-md text-right" >
+                    <a href="#bto"><img src="~/img/置底.png" width="30px;" height="30px;" /></a>
+                </div>
+            </div>
+        </div>
+        
+
+        <div class="col-12" style="background-color:#fefefe; margin-top:15px;">
+            <div class="col-row" style="">
+                <img src="~/img/图表.png" width="25px" height="25px;" style="margin-top:20px; " />
+             </div>
+            <div id="main" class="col-12" style="height:300px;  padding-left:0px; ">
+            </div>
+        </div>
+
+
+        <div class="col-12" style="background-color:#fff; padding-top:20px; padding-bottom:10px; margin-top:3px; ">
+            <div class="row" style="">
+                <div class="col-lg-1 col-xs-12" style="padding-bottom:10px;">
+                    <img src="~/img/关键词.png" width="22px" height="22px;" />     
+                </div>
+                <div id="essentialdisplay" class="col-lg-11 col-xs-12" style=""><div class="row">
+                    <div id="maxd" style="font-size:14px;" class="col-xl-2 col-lg-3 col-sm-6 col-md-4 col-xs-12"></div>
+                    <div id="mind" style="font-size: 14px; " class="col-xl-2 col-lg-3 col-sm-6 col-md-4 col-xs-12"></div>
+                    <div id="maxdmf" style="font-size: 14px; " class="col-xl-2 col-lg-3 col-sm-6 col-md-4 col-xs-12"></div>
+                </div></div>
+            </div>
+        </div>
+
+
+        <div class="col-12" style="font-size:14px; background-color:#ffffff; margin-top:3px; padding-top:20px;">
+            <div class="row" style="padding-left:10px;">
+                <img src="~/img/数据.png" width="28px;" height="28px;" />
+            </div>
+            <table class="table table-hover table-condensed" style="margin-top:20px; min-height:300px;">
+                <tbody id="tabledisplay">
+                </tbody>
+            </table>
+        </div>
+
+        <div id="bto" class="col-12 text-right">
+            <span style="font-size:14px; margin-right:20px;">Notice: Not guaranteed to be completely accureate,For reference only.</span>
+            <a href="#"><img src="~/img/置顶.png" width="30px" height="30px"/></a>
+        </div>
+
+
+        <!--
+        <div class="text-center" style="margin-top:30px;">
+            <a href="/User/Add?variety=@ViewBag.variety" style="font-size:26px; font-weight:600;">the more....</a>
+        </div>
+
+    <p>
+        <a href="#" class="btn btn-primary" role="button">Button</a> <a href="#" class="btn btn-default" role="button">Button</a>
+    </p>
+    -->
+    </div>
+
+
+
+</div>
+
+@section Scripts
+{
+    @{ await Html.RenderPartialAsync("_ValidationScriptsPartial");}    
+<script type="text/javascript" language="JavaScript">
+
+
+    var pageno = 0;
+    var datez = "";
+
+
+    function kkk() {
+            var str="";
+            $.ajax({
+                type: "post",
+                url: "/Detailed/OnStatistics",
+                contenType: "application/json; charset=utf-8",
+                data: { variety: '@ViewBag.variety', level:'@ViewBag.level' },
+                dataType: "json",
+                beforeSend: function () {
+                    $("#statisticedisplay").html("<span style='color:#336699;'><b>Loading data......</b></span");
+                },
+                success: function (result) {
+                    str = str + result[3]+ ' | ';
+                    str = str + 'Time limit: <b>' + result[2] + ' - ' + result[1] + '</b ><br/>The amount of data: <b>' + result[0] + '( Display data: top  )</b>';
+                    $("#statisticedisplay").html(str);
+                    $("#datetimepicker1").val(result[1]);
+                    datez = result[1];
+                    jjj(datez);
+                    uuu(result[1]);
+                }
+            });
+    }
+
+
+
+
+    function uuu(datez) {
+            var str="";
+            $.ajax({
+                type: "post",
+                url: "/Anaylsis/OnStatisticsMinute",
+                contenType: "application/json; charset=utf-8",
+                data: { variety: '@ViewBag.variety'+'_'+'@ViewBag.level' , datez:datez  },
+                dataType: "json",
+                beforeSend: function () {
+                    $("#maxd").html("<span style='color:#336699;'><b>Loading data......</b></span");
+                },
+                success: function (result) {
+                    $("#maxd").html("<b>Max price:</b><br/>" + result[0].hprice );
+                    $("#mind").html("<b>Min price:</b><br/> " + result[0].lprice );
+                    $("#maxdmf").html("<b>Max flucturations:</b><br/> " + result[0].mcprice);
+                }
+            });
+    }
+
+
+
+
+
+    function jjj(datez) {
+            var strr = '';            
+            $.ajax({
+                type: "post",
+                url: "/Detailed/OnTableListMinute",
+                contenType:"application/json;charset=UTF-8",
+                data: { variety: '@ViewBag.variety'+'_'+'@ViewBag.level', datez:datez },
+                dataType: "json",
+                headers: {
+                    "Authorization":"Bearer " + $.cookie("tkkz")
+                },
+                beforeSend: function () {
+                    $("#tabledisplay").html("<span style='color:#336699;'><b>Loading data......</b></span");
+                },
+                success: function (result) {
+                    var strDataClose = new Array();
+                    var strDataOpen = new Array();
+                    var strDay = new Array();
+                    var strTime = new Array();
+                    var j = result.length;
+                    //p = j - 1;
+                    strr = strr + '<tr style="background-color:#eee;"><td style="padding-left:0px;"><b>Date</b></td><td><b>Time</b></td>';
+                    strr = strr + '<td><b>O</b></td><td><b>H</b></td><td><b>L</b></td><td><b>C</b></td>';
+                    strr = strr + '<td><b>Vol</b></td></tr>';
+                    for (var i = 0; i < j; i++){
+                        strr = strr + '<tr>';
+                        strr = strr + '<td style="padding-left:0px;">' + result[i].datetime + '</td>';
+                        strr = strr + '<td>' + result[i].time + '</td>';
+                        strr = strr + '<td>' + result[i].open+'</td>';
+                        strr = strr + '<td>' + result[i].high+'</td>';
+                        strr = strr + '<td>' + result[i].low+'</td>';
+                        strr = strr + '<td>' + result[i].close+'</td>';
+                        strr = strr + '<td>' + result[i].totalvolume+'</td>';
+                        strr = strr + '</tr>';
+                        strDataClose[i] = result[i].close;
+                        strDataOpen[i] = result[i].open;
+                        strDay[i] = result[i].datetime;
+                        strTime[i] = result[i].time;
+                        //p = p - 1;
+                    }
+                    $("#tabledisplay").html(strr);
+
+                    var myChart = echarts.init(document.getElementById('main'));
+
+                    var option = {
+
+                        title: {
+                            text: '',
+                            color:'#105712',
+                        },
+
+                        grid: {
+                            left: "5%",
+                            right: "0%",
+                            height: "75%",
+                            bottom: "15%",
+                        },
+
+                        tooltip: {
+                            trigger: 'axis',
+                            axisPointer: {
+                                type: 'cross'
+                            },
+                            backgroundColor: '#666',
+                            borderWidth: 0,
+                            borderColor: '#ccc',
+                            padding: 10,
+                            textStyle: {
+                                color: '#eee',
+                                fontSize:12,
+                            },
+                            position: function (point, params, dom, rect, size) {
+                                var x = 0; // x坐标位置
+                                var y = 0; // y坐标位置
+                                // 当前鼠标位置
+                                var pointX = point[0];
+                                var pointY = point[1];
+
+                                // 提示框大小
+                                var boxWidth = size.contentSize[0];
+                                var boxHeight = size.contentSize[1];
+                                // boxWidth > pointX 说明鼠标左边放不下提示框
+                                if (boxWidth > pointX) {
+                                    x = 5;
+                                } else { // 左边放的下
+                                    x = pointX - boxWidth;
+                                }
+                                // boxHeight > pointY 说明鼠标上边放不下提示框
+                                if (boxHeight > pointY) {
+                                    y = 5;
+                                } else { // 上边放得下
+                                    y = pointY - boxHeight;
+                                }
+                                return [x, y];
+                            },
+
+                            extraCssText: 'width:170px',
+                        },
+
+                        legend: {
+                            data: ['Price']
+                        },
+
+                        xAxis: {
+                            data: strTime,
+                            axisLine: {
+                                lineStyle: {
+                                    color: '#aaa',
+                                    width:1.2,
+                                },
+                            },
+                            splitLine: {
+                                lineStyle: {
+                                    color: '#eee',
+                                },
+                                show:true,
+                            },
+                            axisLabel: {
+		                        color:'555',
+                            },
+                        },
+
+                        yAxis: {
+                            min: 'dataMin',
+                            max: 'dataMax',
+                            axisLine: {
+                                lineStyle: {
+                                    color: '#aaa',
+                                    width:1.2,
+                                }
+                            },
+                            splitLine: {
+                                lineStyle: {
+                                    color: '#eee',
+                                },
+                                show: true,
+                            },
+                            axisLabel: {
+		                        color:'#555',
+                            },
+                        },
+
+                        series: [{
+                            name: 'Closeprice',
+                            type: 'line',
+                            data: strDataClose,
+                            smooth: true,
+                            itemStyle: {
+                                normal: {
+                                    color: '#6cb041',
+                                    lineStyle:{
+                                        width: 1, //设置线条粗细
+                                        color:'#666',
+                                    }
+                                }
+                            }
+                        }],
+
+                        /*
+                        dataZoom: [
+                            {   // 这个dataZoom组件，默认控制x轴。
+                                type: 'slider', // 这个 dataZoom 组件是 slider 型 dataZoom 组件
+                                start: 0,      // 左边在 10% 的位置。
+                                end: 100         // 右边在 60% 的位置。
+                            },
+                        ]*/
+
+
+                    };
+
+                    // 使用刚指定的配置项和数据显示图表。
+                    myChart.setOption(option);
+
+
+                }
+            });
+    }
+
+
+        $('#datetimepicker1').datetimepicker({
+            format: 'yyyy-mm-dd',
+            autoclose: 1,
+            todayBtn: true,
+            minView: 2,
+            todayHighlight: true,
+            keyboardNavigation: true,
+        }).on('changeDate', function (ev) {
+            jjj($("#datetimepicker1").val());
+            uuu($("#datetimepicker1").val());
+        });
+
+    $(document).ready(function () {
+        //kkk();   
+        $("#datetimepicker1").val('@ViewBag.datetime');
+        jjj('@ViewBag.datetime');
+
+    });
+
+</script>
+ }
+
+

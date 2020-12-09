@@ -1,0 +1,397 @@
+﻿
+@{
+    ViewData["Title"] = "Coronavirous-19 Data";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<script src="~/js/moment.min.js"></script>
+
+<div class="row">
+
+    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" style="margin-bottom:10px;">
+
+        <div class="col-lg-12" style=" padding-bottom:8px; ">
+            <div class="row">
+                <div class="col-12">
+                    <h5 style="color:#000; float:left; margin:0px;">
+                        <b>
+                            Salute those who fight! 
+                            A moment of silence for the dead!
+                        </b>
+                    </h5>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-12" style=" padding-bottom:8px; padding-top:10px; background-color:#cecece; border-left:2px solid #525f83; ">
+            <div class="row">
+                <div class="col-xl-4 col-lg-4 col-md-4 col-xs-12">
+                    <h5 style="color:#1f3369; float:left; "><b>Coronavirus-19 Data</b></h5>
+                    <span style="margin-left:20px; margin-top:2px; float:left; color:#ffffff;">Time zone: GMT</span>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="col-12" style="background-color:#fefefe; margin-top:20px;">
+            <div class="col-row" style="">
+                <img src="~/img/图表.png" width="25px" height="25px;" style="margin-top:20px; " />
+            </div>
+            <div id="main" class="col-12" style="height:300px;  padding-left:0px; ">
+            </div>
+        </div>
+
+
+        <div class="col-12" style="font-size:14px; background-color:#ffffff; margin-top:20px; padding-top:18px;">
+            <div class="row" style="padding-left:10px;">
+                <img src="~/img/数据.png" width="28px;" height="28px;" />
+                <input id='datetimepicker1' type='text' readonly class="form_datetime form-control form-control-sm" style="width:200px; font-weight:700; border:1px solid #ff6a00; float:left; margin-left:30px;" placeholder="Select trading day" />
+                <button id="a" class="btn btn-sm btn-success" onclick="javascript:preday(); " style="float:left; margin-left:5px;">The day before</button>
+                <button id="b" class="btn btn-sm btn-success" onclick="javascript:tday(); " style="float:left; margin-left:5px;">Today</button>
+            </div>
+
+            <div class="row">
+                <div class="col-2">
+                    <div class="row" id="tabledatetime" style="padding-top:15px; padding-bottom:15px; ">
+                    </div>
+                </div>
+                <div class="col-10">
+                    <div class="row" id="tabledisplay" style="padding-top:15px; padding-bottom:15px; ">
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+
+        <div id="bto" class="col-12 text-right" style="margin-top:10px;">
+            <span style="font-size:14px; margin-right:20px;"><b>Notice:</b> Not guaranteed to be completely accureate,For reference only.</span>
+            <a href="#"><img src="~/img/置顶.png" width="30px" height="30px" /></a>
+        </div>
+
+
+    </div>
+</div>
+
+
+
+
+
+@section Scripts
+{
+    @{ await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
+    <script type="text/javascript" language="JavaScript">
+
+        var Ardate = new Array();
+        var Arsa = new Array();
+        var Aroa = new Array();
+        var Arna = new Array();
+        var Areu = new Array();
+        var Aras = new Array();
+        var Araf = new Array();
+
+        function jjj() {
+            
+            var strr = '';
+            var xtrr = '';
+
+            $.ajax({
+                type: "post",
+                url: "/Coronavirus/OnCoronavirusList",
+                contenType: "application/json;charset=UTF-8",
+                data: {  },
+                dataType: "json",
+                beforeSend: function () {
+                    $("#tabledisplay").html("<span style='color:#336699;'><b>Loading data......</b></span");
+                },
+                success: function (result) {
+
+                    var j = result.length;
+                    var csa = 0;
+                    var coa = 0;
+                    var cna = 0;
+                    var ceu = 0;
+                    var cas = 0;
+                    var caf = 0;
+
+                    strr = strr + '<div class="col-xl-2 col-lg-2 col-md-2 col-3" style="border-bottom:1px solid #dedede; background-color:#eee;  line-height:40px;"><b>SAmerica </b></div>';
+                    strr = strr + '<div class="col-xl-2 col-lg-2 col-md-2 d-none d-md-block" style="border-bottom:1px solid #dedede;background-color:#eee; line-height:40px;"><b>Oceania</b></div>';
+                    strr = strr + '<div class="col-xl-2 col-lg-2 col-md-2 col-3" style="border-bottom:1px solid #dedede;background-color:#eee; line-height:40px;"><b>NAmerica</b></div>';
+                    strr = strr + '<div class="col-xl-2 col-lg-2 col-md-2 col-3" style="border-bottom:1px solid #dedede;background-color:#eee; line-height:40px;"><b>Europe</b></div>';
+                    strr = strr + '<div class="col-xl-2 col-lg-2 col-md-2 col-3 " style="border-bottom:1px solid #dedede;background-color:#eee;line-height:40px;"><b>Asia</b></div>';
+                    strr = strr + '<div class="col-xl-2 col-lg-2 col-md-2 d-none d-md-block" style="border-bottom:1px solid #dedede;background-color:#eee;line-height:40px;"><b>Africa</b></div>';
+
+
+                    for (var i = 0; i < j; i++) {
+                        if (result[i].area == "Oceania" || result[i].area == "Africa") {
+                            strr = strr + '<div class="col-xl-2 col-lg-2 col-md-2 d-none d-md-block" style="border-bottom:1px solid #dedede; line-height:20px; padding-top:10px; padding-bottom:10px;">' + result[i].totalcases + '</div>';
+                        } else {
+                            strr = strr + '<div class="col-xl-2 col-lg-2 col-md-2 col-3" style="border-bottom:1px solid #dedede; line-height:20px; padding-top:10px; padding-bottom:10px;">' + result[i].totalcases + '</div>';
+                        }
+                        switch (result[i].area) {
+                            case "South America":
+                                Arsa[csa] = result[i].totalcases;
+                                csa++;
+                                break;
+                            case "Oceania":
+                                Aroa[coa] = result[i].totalcases;
+                                coa++;
+                                break;
+                            case "North America":
+                                Arna[cna] = result[i].totalcases;
+                                cna++;
+                                break;
+                            case "Europe":
+                                Areu[ceu] = result[i].totalcases;
+                                ceu++;
+                                break;
+                            case "Asia":
+                                Aras[cas] = result[i].totalcases;
+                                cas++;
+                                break;
+                            case "Africa":
+                                Araf[caf] = result[i].totalcases;
+                                caf++;
+                                break;
+                        }                        
+                        //strr = strr + '<div class="col-1 " style="border-bottom:1px solid #dedede;  line-height:20px; padding-top:10px; padding-bottom:10px;">' + result[i].totaldeaths + '</div>';                  
+                    }
+                    $("#tabledisplay").html(strr);
+
+
+                    var b = 0;
+                    xtrr = xtrr + '<div class="col-12 " style="border-bottom:1px solid #dedede;background-color:#eee;line-height:40px;"><b>Date</b></div>';
+                    for (var h = 0; h < j; h++) {
+                       
+                        if (h == 0) {
+                            xtrr = xtrr + '<div class="col-12" style="border-bottom:1px solid #dedede; line-height:20px; padding-top:10px; padding-bottom:10px;"><b>' + result[h].datetime + '</b></div>';
+                            Ardate[b] = result[h].datetime;
+                            b++;
+                            continue;
+                        }
+                        if (result[h].datetime == result[h - 1].datetime) {
+                            continue;
+                        } else {
+                            xtrr = xtrr + '<div class="col-12" style="border-bottom:1px solid #dedede; line-height:20px; padding-top:10px; padding-bottom:10px;"><b>' + result[h].datetime + '</b></div>';
+                            Ardate[b] = result[h].datetime;     
+                            b++;
+                        }
+                    } 
+                    $("#tabledatetime").html(xtrr);
+
+
+                    var myChart = echarts.init(document.getElementById('main'));
+                    var option = {
+
+                        title: {
+                            text: '',
+                            color: '#105712',
+                        },
+
+                        grid: {
+                            left: "10%",
+                            right: "3%",
+                            height: "78%",
+                            bottom: "15%",
+                        },
+
+                        tooltip: {
+                            trigger: 'axis',
+                            axisPointer: {
+                                type: 'cross'
+                            },
+                            backgroundColor: '#666',
+                            borderWidth: 0,
+                            borderColor: '#ccc',
+                            padding: 10,
+                            textStyle: {
+                                color: '#eee',
+                                fontSize: 12,
+                            },
+                            position: function (point, params, dom, rect, size) {
+                                var x = 0; // x坐标位置
+                                var y = 0; // y坐标位置
+                                // 当前鼠标位置
+                                var pointX = point[0];
+                                var pointY = point[1];
+
+                                // 提示框大小
+                                var boxWidth = size.contentSize[0];
+                                var boxHeight = size.contentSize[1];
+                                // boxWidth > pointX 说明鼠标左边放不下提示框
+                                if (boxWidth > pointX) {
+                                    x = 5;
+                                } else { // 左边放的下
+                                    x = pointX - boxWidth;
+                                }
+                                // boxHeight > pointY 说明鼠标上边放不下提示框
+                                if (boxHeight > pointY) {
+                                    y = 5;
+                                } else { // 上边放得下
+                                    y = pointY - boxHeight;
+                                }
+                                return [x, y];
+                            },
+
+                            extraCssText: 'width:300px',
+
+                        },
+                        legend: {
+                            data: ['Count']
+                        },
+
+                        xAxis: {
+                            data: Ardate.reverse(),
+                            axisLine: {
+                                lineStyle: {
+                                    color: '#aaa',
+                                    width: 1.2,
+                                },
+                            },
+                            splitLine: {
+                                lineStyle: {
+                                    color: '#eee',
+                                },
+                                show: true,
+                            },
+                            axisLabel: {
+                                color: '555',
+                            },
+                        },
+
+                        yAxis: {
+                            min: 9000000,
+                            max: 'dataMax',
+                            axisLine: {
+                                lineStyle: {
+                                    color: '#aaa',
+                                    width: 1.2,
+                                }
+                            },
+                            splitLine: {
+                                lineStyle: {
+                                    color: '#eee',
+                                },
+                                show: true,
+                            },
+                            axisLabel: {
+                                color: '#555',
+                            },
+                        },
+
+                        series: [{
+                            name: 'NorthAmerica TotalCases',
+                            type: 'bar',
+                            data: Arna.reverse(),
+                            smooth: true,
+                            itemStyle: {
+                                normal: {
+                                    color: '#001122',
+                                    lineStyle: {
+                                        width: 1, //设置线条粗细
+                                        color: '#666',
+                                    }
+                                }
+                            }
+                        },{
+                            name: 'SourthAmerica TotalCases',
+                            type: 'bar',
+                            data: Arsa.reverse(),
+                            smooth: true,
+                            itemStyle: {
+                                normal: {
+                                    color: '#445566',
+                                    lineStyle: {
+                                        width: 1, //设置线条粗细
+                                        color: '#666',
+                                    }
+                                }
+                            }
+                        },{
+                            name: 'Europe TotalCases',
+                            type: 'bar',
+                            data: Areu.reverse(),
+                            smooth: true,
+                            itemStyle: {
+                                normal: {
+                                    color: '#8899aa',
+                                    lineStyle: {
+                                        width: 1, //设置线条粗细
+                                        color: '#666',
+                                    }
+                                }
+                            }
+                        },{
+                            name: 'Asia TotalCases',
+                            type: 'bar',
+                            data: Aras.reverse(),
+                            smooth: true,
+                            itemStyle: {
+                                normal: {
+                                    color: '#ccddee',
+                                    lineStyle: {
+                                        width: 1, //设置线条粗细
+                                        color: '#666',
+                                    }
+                                }
+                            }
+                        }],
+
+                        /*
+                        dataZoom: [
+                            {   // 这个dataZoom组件，默认控制x轴。
+                                type: 'slider', // 这个 dataZoom 组件是 slider 型 dataZoom 组件
+                                start: 0,      // 左边在 10% 的位置。
+                                end: 100         // 右边在 60% 的位置。
+                            },
+                        ]*/
+
+
+                    };
+
+                    // 使用刚指定的配置项和数据显示图表。
+                    myChart.setOption(option);
+
+
+                }
+            });
+        }
+
+
+        jjj();
+
+        function preday() {
+            var pd = moment().add(ds, 'days').format("YYYY-MM-DD");
+            jjj(  );
+            $("#datetimepicker1").val(pd);   
+            ds--;
+        }
+
+        function tday() {
+            jjj();
+            $("#datetimepicker1").val(moment().format("YYYY-MM-DD"));            
+            ds = -1;
+        }
+
+        $(document).ready(function () {
+
+            $("#datetimepicker1").val( moment().format("YYYY-MM-DD") );
+            $('#datetimepicker1').datetimepicker({
+                format: 'yyyy-mm-dd',
+                autoclose: 1,
+                todayBtn: true,
+                minView: 2,
+                todayHighlight: true,
+                keyboardNavigation: true,
+            }).on('changeDate', function (ev) {
+                //jjj($("#datetimepicker1").val());
+            });
+
+        })
+
+
+    </script>
+
+}
+

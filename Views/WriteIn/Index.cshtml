@@ -1,0 +1,76 @@
+﻿
+@{
+    ViewData["Title"] = "WirteIn Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Writein Index</h1>
+<div class="row">
+    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" style="margin-bottom:50px;">
+        <br/><br/>
+             <div>
+                 Content URL:&nbsp;&nbsp;
+                 <input id='sendcontent' type='text' class='form-control' /><br />
+                 <input id='sendsubmit' type='button' class='btn btn-success' value='Submit' onclick="javascript: bab();"/>
+             </div>    
+        <div id="tagx">
+        </div>
+    </div>    
+</div>
+
+
+<script type="text/javascript" language="JavaScript">
+
+    /*function pap() {
+        $.ajax({
+                type: "GET",
+                url: "/WriteIn/OnInput",
+                data: {},
+                contenType: "application/json;charset=UTF-8",
+                dataType: "text",
+                headers: {
+                    "Authorization": "Bearer " + $.cookie("tkkz"),
+                },
+                success: function (result) {
+                    if (result=="Error") {
+                        $("#writeinx").html("No content");
+                    } else {
+                        $("#writeinx").html(result);
+                    }
+                }
+        });
+    }
+    pap();*/
+
+    function bab(contenturl) {
+        $.ajax({
+            type: "GET",
+            url: $("#sendcontent").val(),
+            data: {},
+            contenType: "application/json;charset=UTF-8",
+            dataType: "text",
+            headers: {
+                "Authorization": "Bearer " + $.cookie("tkkz"),
+            },
+            success: function (result) {
+                switch (result) {
+                    case "Have":
+                        $("#tagx").html("data existing!");
+                        break;
+                    case "Error":
+                        $("#tagx").html("Error!");
+                        break;
+                    case "Ok":
+                        $("#tagx").html("Data input Success!");
+                        break;
+                 }
+            }
+        });
+    }
+
+    
+
+
+</script>
+
+
